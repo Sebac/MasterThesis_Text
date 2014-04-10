@@ -1,0 +1,97 @@
+\begin{thebibliography}{10}
+
+\bibitem{h2g2}
+D.~Adams.
+\newblock {\em The Hitchhiker's Guide to the Galaxy}.
+\newblock Del Rey (reprint), 1995.
+\newblock ISBN-13: 978-0345391803.
+
+\bibitem{Agrawal2013}
+P.~Agrawal, M.~Vatsa, and R.~Singh.
+\newblock Hep-2 cell image classification: A comparative analysis.
+\newblock In G.~Wu, D.~Zhang, D.~Shen, P.~Yan, K.~Suzuki, and F.~Wang, editors,
+  {\em Machine Learning in Medical Imaging}, volume 8184 of {\em Lecture Notes
+  in Computer Science}, pages 195--202. Springer International Publishing,
+  2013.
+
+\bibitem{FoggiaBenchmarks2013}
+P.~Foggia, G.~Percannella, P.~Soda, and M.~Vento.
+\newblock Benchmarking hep-2 cells classification methods.
+\newblock {\em IEEE Trans. Med. Imaging}, 32:1878--1889, 2013.
+
+\bibitem{HuangWatershed}
+Y.-L. Huang, C.-W. Chung, T.-Y. Hsieh, and Y.-L. Jao.
+\newblock Outline detection for the hep-2 cell in indirect immunofluorescence
+  images using watershed segmentation.
+\newblock In {\em Sensor Networks, Ubiquitous and Trustworthy Computing, 2008.
+  SUTC '08. IEEE International Conference on}, pages 423--427, 2008.
+
+\bibitem{Huang2008}
+Y.-L. Huang, Y.-L. Jao, T.-Y. Hsieh, and C.-W. Chung.
+\newblock Adaptive automatic segmentation of hep-2 cells in indirect
+  immunofluorescence images.
+\newblock In {\em Proceedings of the 2008 IEEE International Conference on
+  Sensor Networks, Ubiquitous, and Trustworthy Computing (Sutc 2008)}, SUTC
+  '08, pages 418--422. IEEE Computer Society, 2008.
+
+\bibitem{OdellCook2013}
+D.~C. Ian D~Odell.
+\newblock Immunofluorescence techniques, 2013.
+
+\bibitem{Kuan2012}
+K.~Li, J.~Yin, Z.~Lu, X.~Kong, R.~Zhang, and W.~Liu.
+\newblock Multiclass boosting svm using different texture features in hep-2
+  cell staining pattern classification.
+\newblock In {\em Pattern Recognition (ICPR), 2012 21st International
+  Conference on}, pages 170--173, 2012.
+
+\bibitem{nakamura1996quality}
+R.~Nakamura.
+\newblock {\em Quality Assurance for the Indirect Immunofluorescence Test for
+  Autoantibodies to Nuclear Antigen (IF-ANA): Approved Guideline (1996)}.
+\newblock NCCLS document. NCCLC, 1996.
+
+\bibitem{Nosaka2011}
+R.~Nosaka, Y.~Ohkawa, and K.~Fukui.
+\newblock Feature extraction based on co-occurrence of adjacent local binary
+  patterns.
+\newblock In {\em Proceedings of the 5th Pacific Rim Conference on Advances in
+  Image and Video Technology - Volume Part II}, PSIVT'11, pages 82--91.
+  Springer-Verlag, 2012.
+
+\bibitem{Nosaka2012}
+R.~Nosaka, C.~H. Suryanto, and K.~Fukui.
+\newblock Rotation invariant co-occurrence among adjacent lbps.
+\newblock In {\em Proceedings of the 11th International Conference on Computer
+  Vision - Volume Part I}, ACCV'12, pages 15--25. Springer-Verlag, 2013.
+
+\bibitem{Perner02miningknowledge}
+P.~Perner, H.~Perner, and B.~Mueller.
+\newblock Mining knowledge for hep-2 cell image classification.
+\newblock {\em Artificial Intelligence in Medicine}, 26:161--173, 2002.
+
+\bibitem{Rigon2007}
+A.~Rigon, P.~Soda, D.~Zennaro, G.~Iannello, and A.~Afeltra.
+\newblock {Indirect immunofluorescence in autoimmune diseases: Assessment of
+  digital images for diagnostic purpose}.
+\newblock {\em Cytometry Part B-clinical Cytometry}, 72B:472--477, 2007.
+
+\bibitem{SodaIntensity2006}
+P.~Soda and G.~Iannello.
+\newblock A multi-expert system to classify fluorescent intensity in
+  antinuclear autoantibodies testing.
+\newblock In {\em Computer-Based Medical Systems, 2006. CBMS 2006. 19th IEEE
+  International Symposium on}, pages 219--224, 2006.
+
+\bibitem{SodaIntensity2009}
+P.~Soda, G.~Iannello, and M.~Vento.
+\newblock A multiple expert system for classifying fluorescent intensity in
+  antinuclear autoantibodies analysis.
+\newblock {\em Pattern Anal. Appl.}, 12(3):215--226, Sept. 2009.
+
+\bibitem{Varma2005}
+M.~Varma and A.~Zisserman.
+\newblock A statistical approach to texture classification from single images.
+\newblock {\em Int. J. Comput. Vision}, 62(1-2):61--81, Apr. 2005.
+
+\end{thebibliography}
