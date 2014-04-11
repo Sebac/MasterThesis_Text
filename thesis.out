@@ -15,6 +15,10 @@
 \BOOKMARK [1][-]{section.3.2}{Intesity level classification}{chapter.3}% 15
 \BOOKMARK [1][-]{section.3.3}{Staining pattern classification}{chapter.3}% 16
 \BOOKMARK [0][-]{chapter.4}{Cell segmentation}{}% 17
-\BOOKMARK [0][-]{chapter.5}{Fluorescence intensity classification}{}% 18
-\BOOKMARK [0][-]{chapter.6}{Describing cells}{}% 19
-\BOOKMARK [0][-]{section*.10}{Bibliography}{}% 20
+\BOOKMARK [1][-]{section.4.1}{Gaussian mixture model}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.2}{Expectation Maximization Algorithm}{chapter.4}% 19
+\BOOKMARK [0][-]{chapter.5}{Fluorescence intensity classification}{}% 20
+\BOOKMARK [1][-]{section.5.1}{Classifying intensity}{chapter.5}% 21
+\BOOKMARK [0][-]{chapter.6}{Describing cells}{}% 22
+\BOOKMARK [1][-]{section.6.1}{Interesting features}{chapter.6}% 23
+\BOOKMARK [0][-]{section*.10}{Bibliography}{}% 24

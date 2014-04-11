@@ -9,3 +9,48 @@
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
+
+
+
+%-----------------------------------------------------------------------------------------
+%     GAUSSIAN MIXTURE MODELS
+%-----------------------------------------------------------------------------------------
+
+\section{Gaussian mixture model} 
+
+Mixture density is a linear combination of \textit{K} probabilistic density functions:
+
+\begin{equation}
+	p(\mathbf{x}) = \sum_{k=1}^{K}\pi_k p(\mathbf{x} | \theta_k)
+	\label{eq:GMM}
+\end{equation}
+	 
+where $p(\mathbf{x} | \theta_k)$ represents mixture components with their parameters $\theta_k$. In out case, those mixture components are Gaussian functions $\mathcal{N}(\mu_k, \Sigma_k)$. Parameters $\pi_k$ are mixture coefficients that satisfy $1 \leq \pi_k \leq 1$ and $\sum_{k=1}^{K} \pi_k = 1$. As they satisfy given criteria, those coefficient can be treated as prior probability of a component $k$. Equation \ref{eq:GMM} can be then rewritten as :
+
+\begin{equation}
+	p(\mathbf{x}) = \sum_{k=1}^{K} P(\mathcal{G}_k) p(\mathbf{x} | \mathcal{G}_k),
+\end{equation}
+
+where $P(\mathcal{G}) = \pi_k$ and $ p(\mathbf{x} | \theta_k) =  p(\mathbf{x} | \mathcal{G}_k)$. Out task is to determine the parameters
+
+$$ \theta = \{ P(\mathcal{G}_k), \theta_k \}_{k=1}^K,$$
+
+or more precisely for the Gaussian function
+
+$$ \theta = \{ P(\mathcal{G}_k), \mu_k, \Sigma_k \}_{k=1}^K.$$
+
+An efficient algorithm to determine those values is the Expectation Maximization algorithm.
+
+
+
+%------------------------------------------------------------------------------------------
+%     EM ALGORITHM
+%------------------------------------------------------------------------------------------
+
+\section{Expectation Maximization Algorithm}
+
+The goal of the Expectation Maximization algorithm is to find parameters $\theta$ that maximize the log-likelihood 
+
+\begin{equation}
+	\mathcal{L}(\theta | \mathcal{D}) = \mathtt{ln}\prod_{i=1}^{N}p(\mathbf{x}^{(i)}) = \mathtt{ln}\prod_{i=1}^{N}\sum_{k=1}^{K}p(\mathbf{x}^{(i)} | \theta_k) = \sum_{i=1}^{N}\mathtt{ln}\sum_{k=1}^{K}p(\mathbf{x}^{(i)} | \theta_k).
+\end{equation}

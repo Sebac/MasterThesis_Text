@@ -9,4 +9,24 @@
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-The fluorescence intensity is an parameter that describes  
+The fluorescence intensity is an parameter that describes the \textit{clarity} of cells in image. It is a subjective parameter which, unfortunately, doesn't have a strong theoretical explanation. The fluorescence intensity is described with three values - positive, intermediate and negative. Positive value defines images in which cells are perfectly separated from background, while negative value defines images in which cells in which cells cannot be identified. The intermediate value covers images that are not positive nor negative. \\
+
+
+In \cite{Rigon2007} Rigon studied the variability of decision made by doctors and showed that it is hard to achieve a consensus about unique determination of the fluorescence intensity value. The lack of underlying model is making this problem hard to formulate. The intuition behind the suggested approach is an assumption that intensity level could be observed in the histogram of an image. The fluorescence intensity should correspond to the difference to a region describing the background and a region describing cells. Following the intuition, an image histogram is approximated with the Gaussian mixture model. \\
+
+The idea is to approximate the histogram with a mixture of 2 Gaussian functions - one representing the background and second one to model the cells. The intuition is that images with positive intensity should have Gaussians with higher means and more further apart. 
+
+
+%-----------------------------------------------------------------------------------------
+%     Classifying intensity
+%-----------------------------------------------------------------------------------------
+
+\section{Classifying intensity}
+
+Once histogram has been approximated with two Gaussian functions, the estimated means and variances have taken as features for the classification. SVM with radial basis functions as kernel function has been trained for the task. Evaluation is performed using a 10-fold cross validation. \\
+
+\subsection{Support Vector Machine}
+
+\subsection{Results}
+
+One issue that might occur is a bad estimation of the background or cell body as some cells takes a very small portion of an image or, on the other size, takes almost a whole image when segmented as shown in image X. To see how this influences the problem, histograms are approximated with Gaussian functions in two ways. First, the histogram is as in Chapter \ref{Chapter4}, without any restrictions. Second, the background and cells part of an image are separated and each part is approximated with a Gaussian individually. 

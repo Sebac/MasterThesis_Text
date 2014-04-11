@@ -22,6 +22,12 @@
 \contentsline {section}{\numberline {3.2}Intesity level classification}{10}{section.3.2}
 \contentsline {section}{\numberline {3.3}Staining pattern classification}{10}{section.3.3}
 \contentsline {chapter}{\chapternumberline {4}Cell segmentation}{13}{chapter.4}
+\contentsline {section}{\numberline {4.1}Gaussian mixture model}{13}{section.4.1}
+\contentsline {section}{\numberline {4.2}Expectation Maximization Algorithm}{14}{section.4.2}
 \contentsline {chapter}{\chapternumberline {5}Fluorescence intensity classification}{15}{chapter.5}
+\contentsline {section}{\numberline {5.1}Classifying intensity}{15}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Support Vector Machine}{16}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Results}{16}{subsection.5.1.2}
 \contentsline {chapter}{\chapternumberline {6}Describing cells}{17}{chapter.6}
+\contentsline {section}{\numberline {6.1}Interesting features}{17}{section.6.1}
 \contentsline {chapter}{Bibliography}{21}{section*.10}
