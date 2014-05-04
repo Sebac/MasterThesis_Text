@@ -6,17 +6,65 @@
 
 
 %----------------------------------------------------------------------------------------
-%	SECTION 1
+%	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
+Finding the cells in images is the first and crucial step in the procedure. The problems encountered in the cell segmentation are discussed in Chapter \ref{Chapter3}. All of the problems occur due to coloring procedure that is time dependent, so cells expose different intensity levels over an image. Because of that, part of cells remains undetected and overlapping. The challenge here is to find a method that can overcome different illumination of objects. Proposed solution deals with mentioned problems in separate steps. \\
 
 
+The proposed solution is based on an observation that, although cells exhibit different properties across image due to different illumination levels, the background is uniform over a whole image and exhibit constant properties. Following the observations, as summarized in algorithm X, the method first segments the background to find locations of the cells and then uses second segmentation step to refine the borders of cells. \\
+
+
+
+%----------------------------------------%
+%                                        %
+%         REGION GROWING                 %
+%                                        %
+%----------------------------------------%
+
+
+\section{Background segmentation}
+
+The first step of background segmentation is intended to overcome the problem of undetected cells. A desirable property of segmentation algorithm for this task is the capability of capturing the global properties of the background region across an image. One such algorithm is \textit{Region growing}. Region growing is a simple method that extends a region based on a similarity in intensity levels - the intensity of each candidate pixel is compared with a mean intensity of a current region. If a difference is less than a given threshold, the pixel is added to region. The algorithm is summarized in algorithm \ref{alg:RegGrow}. \\
+
+\begin{algorithm}
+\caption{Region Growing }
+  \label{alg:RegGrow}
+\begin{algorithmic}[1]
+ \Function{RegionGrowing}{\textit{starting point, criteria}}
+ \State $\mathtt{candidates} \gets \{ \mathtt{neighborhood}(\mathtt{starting \ point}) \}$
+ \State $\mathtt{region} \gets \{ \mathtt{starting \ point} \}$
+ \State $\mathtt{current point} \gets \mathtt{starting \ point}$
+ \While{no new candidates}
+ 	\For{each candidate of current point}
+ 		\If{candidate satisfies criteria}
+ 			\State add it to region
+ 			\State update parameters of region
+ 		\EndIf 
+ 	\EndFor
+ 	\State $\mathtt{current point} \gets \mathtt{next \ point \ from \ border}$
+ \EndWhile
+ \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+The bottleneck of the method is the evaluation of candidate pixels. If target regions are big, as in this case, the method could be very slow. To overcome this bottle neck, the method is extended with a pre-filling step in which a part of an image is assigned to belong to the background by default. As it can be noticed from images, the majority of image is a dark background which can be observed in an image histogram as the highest peak. To speed up the segmentation, every pixel with intensity lower or equal to the highest peak is automatically assigned to background.   \\
+
+The critical issue here is the estimation of a threshold for comparison. It is a parameter that depends on a distribution of intensities over an image. In a sense, this parameter models a variance in intensity of the background region. Motivated by a variance fitting, the proposed solution is based on an assumption that an image histogram should consist of two regions - one modeling the background and a second one modeling cells, as illustrated in image \ref{img:Histogram}. The goal now is to find those two regions in a histogram. One way to accomplish that is to approximate a histogram with a mixture of Gaussian functions. This approach is taken here.  
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.4]{Figures/segmentation/raw_histogram}
+		\caption{Example of an image histogram}
+		\label{img:Histogram}
+	\end{center}
+\end{figure}
 
 %-----------------------------------------------------------------------------------------
 %     GAUSSIAN MIXTURE MODELS
 %-----------------------------------------------------------------------------------------
 
-\section{Gaussian mixture model} 
+\subsection{Gaussian mixture model} 
 
 Mixture density is a linear combination of \textit{K} probabilistic density functions:
 
@@ -33,11 +81,17 @@ where $p(\mathbf{x} | \theta_k)$ represents mixture components with their parame
 
 where $P(\mathcal{G}) = \pi_k$ and $ p(\mathbf{x} | \theta_k) =  p(\mathbf{x} | \mathcal{G}_k)$. Out task is to determine the parameters
 
-$$ \theta = \{ P(\mathcal{G}_k), \theta_k \}_{k=1}^K,$$
+\begin{equation}
+	 \theta = \{ P(\mathcal{G}_k), \theta_k \}_{k=1}^K,
+\end{equation}
+
 
 or more precisely for the Gaussian function
 
-$$ \theta = \{ P(\mathcal{G}_k), \mu_k, \Sigma_k \}_{k=1}^K.$$
+\begin{equation}
+	 \theta = \{ P(\mathcal{G}_k), \mu_k, \Sigma_k \}_{k=1}^K.
+\end{equation}
+
 
 An efficient algorithm to determine those values is the Expectation Maximization algorithm.
 
@@ -47,10 +101,258 @@ An efficient algorithm to determine those values is the Expectation Maximization
 %     EM ALGORITHM
 %------------------------------------------------------------------------------------------
 
-\section{Expectation Maximization Algorithm}
+\subsection{Expectation Maximization Algorithm}
 
 The goal of the Expectation Maximization algorithm is to find parameters $\theta$ that maximize the log-likelihood 
 
 \begin{equation}
 	\mathcal{L}(\theta | \mathcal{D}) = \mathtt{ln}\prod_{i=1}^{N}p(\mathbf{x}^{(i)}) = \mathtt{ln}\prod_{i=1}^{N}\sum_{k=1}^{K}p(\mathbf{x}^{(i)} | \theta_k) = \sum_{i=1}^{N}\mathtt{ln}\sum_{k=1}^{K}p(\mathbf{x}^{(i)} | \theta_k).
 \end{equation}
+
+Unfortunately, there is no closed-form solution for this formulation. Model $p( \mathbf{X} | \boldsymbol \theta)$ is extended with latent variable $\mathbf{Z}$ which determines to which cluster belongs every $x_i$. The density function is now described with $p(\mathbf{X}, \mathbf{Z} | \boldsymbol \theta)$. Marginal density $p(\mathbf{X} | \theta)$, which is density we want to estimate, can always be reconstructed from joint probability by marginalization :
+
+$$ p(\mathbf{X} | \theta) = \sum_{\mathbf{Z}}p(\mathbb{X}, \mathbf{Z} | \boldsymbol \theta). $$
+
+Log-likelihood we try to maximize is now
+
+\begin{equation}
+	\mathtt{ln}\mathcal{L}(\boldsymbol \theta | \mathbf{X}) = \mathtt{ln}p(\mathbf{X} | \boldsymbol \theta) = \mathtt{ln}\sum_{\mathbf{Z}}p(\mathbf{X}, \mathbf{Z} | \boldsymbol \theta).
+\end{equation}
+
+As values of the latent variable $\mathbf{Z}$ are not yet known, we still can't work with log-likelihood directly. Instead, we will work with the expectation of the log-likelihood $\mathbb{E}[ \mathtt{ln} \mathcal{L}(\boldsymbol \theta | \mathbf{X}, \mathbf{Z}) ]$. The main idea behind the EM-algorithm is to iteratively adjust parameters $\boldsymbol \theta$ to maximize the expectation. \\
+
+The maximization of  $\mathbb{E}[ \mathtt{ln} \mathcal{L}(\boldsymbol \theta | \mathbf{X}, \mathbf{Z}) ]$ is now done by switching between two steps -- E-step and M-step. E-step (\textit{expectation step}) calculates the expectation of the log-likelihood with respect to current values of the parameters  $ \boldsymbol\theta^{(t)}$. That expectation $\mathcal{Q}( \boldsymbol \theta | \boldsymbol \theta^{(t)})$ we can calculate as
+
+\begin{equation} \label{eq1}
+\begin{split}
+  \mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}) &= \mathbb{E}_{\mathbf{Z} | \mathbf{X}, \boldsymbol \theta^{(t)}}[ \mathtt{ln} \mathcal{L}(\theta | \mathbf{X}, \mathbf{Z}) ] \\
+     &= \mathbb{E}_{\mathbf{Z} | \mathbf{X}, \theta^{(t)}}[ \mathtt{ln} p(\mathbf{X}, \mathbf{Z} | \theta) ] \\
+      &= \sum_{\mathbf{Z}}P(\mathbf{Z}| \mathbf{X}, \boldsymbol \theta^{(t)})\mathtt{ln} p(\mathbf{X}, \mathbf{Z} | \boldsymbol \theta). \\
+\end{split}
+\end{equation}
+
+The expectation is now expressed on variable $\mathbf{Z}$ with fixed values of $\mathbf{X}$ and $\theta$. Probability $P(\mathbf{Z}| \mathbf{X}, \boldsymbol \theta^{(t)})$ is the a posteriori  probability of the latent variable $\mathbf{Z}$ with fixed parameters which can be evaluated using Bayes rule. \\
+
+Only thing left is to optimize the parameters $\boldsymbol \theta$. M-step (\textit{maximization step}) chooses new parameters $\boldsymbol \theta^{(t+1)}$ by maximizing the expression
+
+\begin{equation}
+	\boldsymbol \theta^{(t+1)} = \arg \max_{\theta}\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}).
+\end{equation}
+EM-algorithm is briefly summarized in Algorithm \ref{alg:EM}. Starting with the initial parameters $\boldsymbol \theta^{(0)}$, it iteratively switches between E and M step until converged. The convergence is guaranteed as algorithm maximizes the expectation in every iteration. On the other hand, found solution might not be the global optimum. \\
+
+\begin{algorithm}
+\label{alg:EM}
+\caption{Expectation-maximization algorithm}
+
+\begin{algorithmic}[1]
+ 	\Function{EM}{}
+ 		\State Initialize parameters $\boldsymbol \theta^{(0)}$
+ 		\State \textit{t} $\leftarrow$ 0
+ 		\Repeat
+ 			\State \textbf{E-step:} calculate $P(\mathbf{Z} | \mathbf{X}, \boldsymbol \theta^{(t)})$
+ 			\State \textbf{M-step:} $\boldsymbol \theta^{(t+1)} \leftarrow \arg\max_{\theta}\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)})$ 
+ 			 \Statex \quad \quad \quad \quad where $\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}) = \sum_{\mathbf{Z}}P(\mathbf{Z}|\mathbf{X}, \boldsymbol \theta^{(t)}) \mathtt{ln}p(\mathbf{X}, \mathbf{Z}| \boldsymbol \theta)$
+ 			\State $t \leftarrow t+1$
+ 		\Until{converged}
+ 	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+%---------------------------------------------%
+%                                             %
+%               EM for GMM                    %
+%                                             %
+%---------------------------------------------%
+
+
+
+\subsection{EM algorithm for mixture models}
+
+The EM-algorithm for mixture models works as follows. Let $\mathbf{z} = (z_1, \ldots, z_K)$ be a latent variable vector indicating a cluster to which an example belong to. $z_k = 1$ if an example belongs to a cluster $\mathcal{G}_k$, $z_k=0$ otherwise. Each cluster is assigned with a prior probability 
+$$ P(z_k = 1) = \pi_k, $$
+such that $\sum_k\pi_k=1$. Distribution over a latent variable $\mathbf{z}$  hence can be expressed as 
+
+\begin{equation}
+	P(\mathbf{z}) = \prod_{k=1}^K\pi_k^{z_k}.
+\end{equation}
+
+To evaluate the probability $p(\mathbf{x}, \mathbf{z} | \boldsymbol \theta)$ we are still missing the factor $p(\mathbf{x}| \mathbf{z}, \boldsymbol \theta)$. It can be expressed as 
+
+\begin{equation}
+	p(\mathbf{x}| \mathbf{z}, \boldsymbol \theta) = \prod_{k=1}^{K}p(\mathbf{x}| \boldsymbol \theta_k)^{z_k}.
+\end{equation}
+
+Joint probability $p(\mathbf{x}, \mathbf{z} | \boldsymbol \theta)$ can now be expressed as 
+\begin{equation}
+	p(\mathbf{x}, \mathbf{z} | \boldsymbol \theta) = P(\mathbf{z})p(\mathbf{x}| \mathbf{z}, \boldsymbol \theta) = \prod_{k=1}^K\pi_{k}^{z_k}\prod_{k=1}^Kp(\mathbf{x}| \boldsymbol \theta_k)^{z_k}.
+	\label{EMM:joint}
+\end{equation}
+
+Using the obtained model \ref{EMM:joint}, the log-likelihood $\mathtt{ln}\mathcal{L}(\boldsymbol \theta | \mathcal{D}, \mathcal{Z})$ can be expressed. Take $\mathcal{D} = \{ \mathbf{x}^(i) \}_{i=1}^N$ as a set of examples and $\mathcal{Z} = \{ \mathbf{z}^{(i)} \}_{i=1}^N$ as a set of latent variables describing the relationship between examples and model. Log-likelihood of the model \ref{EMM:joint} is 
+
+\begin{equation}
+\begin{split}
+	\mathtt{ln}\mathcal{L}(\boldsymbol \theta | \mathcal{D}, \mathcal{Z}) &= \mathtt{ln}\prod_{i=1}^N p(\mathbf{x}^{(i)}, \mathbf{z}^{(i)} | \boldsymbol \theta) = \mathtt{ln}\prod_{i=1}^N\prod_{k=1}^K \pi_k^{z_k^{(i)}}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k)^{z_k^{(i)}} \\
+	&= \sum_{i=1}^N \sum_{k=1}^Kz_k^{(i)} \left ( \mathtt{ln}\pi_k + \mathtt{ln}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k)  \right ).
+\end{split}
+\end{equation}
+
+\subsubsection{E-step}
+
+In E-step of the algorithm we need to calculate the expectation $\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)})$:
+
+\begin{equation}
+	\begin{split}
+		\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}) &= \mathbb{E}_{\mathit{Z} | \mathcal{D}, \theta^{(t)}}[ \mathtt{ln}\mathcal{L}(\boldsymbol \theta | \mathcal{D}, \mathcal{Z}) ] \\
+		&= \mathbb{E}_{\mathit{Z} | \mathcal{D}, \theta^{(t)}} \left [ \sum_{i=1}^N \sum_{k=1}^K z_k^{(i)} \left ( \mathtt{ln}\pi_k + \mathtt{ln}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k)  \right ) \right ] \\
+		&= \sum_{i=1}^N \sum_{k=1}^K \mathbb{E} \left [ z_k^{(i)} | \mathcal{D}, \boldsymbol \theta^{(i)} \right ] \left ( \mathtt{ln}\pi_k + \mathtt{ln}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k)  \right ).
+	\end{split}
+\end{equation}
+
+As $z_k^{i}$ is a Bernoulli variable (as only one component of $\mathbf{z}^{(i)}$ can be 1) which depends only on one example from $\mathcal{D}$, $\mathbf{x}^{(i)}$, it holds
+
+\begin{equation}
+	\mathbb{E} \left [ z_k^{(i)} | \mathcal{D}, \boldsymbol \theta^{(t)}  \right ] = \mathbb{E} \left [ z_k^{(i)} | \mathbf{x}^{(i)}, \boldsymbol \theta^{(t)}  \right ] = P(z_k^{(i)} = 1 | \mathbf{x}^{(i)}, \boldsymbol \theta^{(i)}).
+\end{equation}
+
+The expectation of the latent variable equals to its \textit{a posteriori } probability and it can be evaluated by applying the Bayes rule:
+
+\begin{equation}
+	\begin{split}
+		P(z_k^{(i)} = 1 | \mathbf{x}^{(i)}, \boldsymbol \theta^{(i)}) &= \frac{p(\mathbf{x}^{(i)}| z_k^{(i)} = 1, \boldsymbol \theta^{(t)})P(z_k^{(i)}=1)}{ \sum_{j=1}^{K} p(\mathbf{x}^{(i)}| z_j^{(i)} = 1, \boldsymbol \theta^{(t)})P(z_j^{(i)}=1) } \\
+		&= \frac{p(\mathbf{x}^{(i)}| z_k^{(i)} = 1, \boldsymbol \theta^{(t)})\pi_k^t}{\sum_{j=1}^{K} p(\mathbf{x}^{(i)}| z_j^{(i)} = 1, \boldsymbol \theta^{(t)})\pi_j^t} \equiv h_k^{(i)}.
+	\end{split}
+\end{equation}
+
+Hence, the expectation of the log-likelihood equals
+
+\begin{equation}
+	\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}) = \sum_{i=1}^N \sum_{k=1}^K h_k^{(i)}\mathtt{ln}\pi_k + \sum_{i=1}^N \sum_{k=1}^K h_k^{(i)}\mathtt{ln}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k).
+	\label{eq:LogLik}
+\end{equation}
+
+\subsubsection{M-step}
+
+M-step maximizes the log-likelihood obtained in \ref{eq:LogLik}. The solution is found analytically by solving $\nabla_{\boldsymbol \theta} \mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)})$. To obtain the mixture components, $\pi_k^{(t+1)}$, the equation is $\nabla_{\pi_k}\mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)})$. As the second term in \ref{eq:LogLik} does not depend on $\pi_k$, so it can be ignored. Starting from 
+
+\begin{equation}
+	\nabla_{\pi_k} \left ( \sum_{i=1}^N \sum_{k=1}^K h_k^{(i)} \mathtt{ln}\pi_k + \lambda \left ( \sum_k\pi_k - 1 \right )  \right ) = 0,
+\end{equation}
+
+where \textit{Langrange multiplier} is used to satisfy the condition $\sum_{k=1}^{K} = 1$, it can be easily obtained 
+
+\begin{equation}
+	\pi_k^{(t+1)} = \frac{1}{N} \sum_{i=1}^N h_k^{(i)}.
+\end{equation}
+
+To find parameters of each component, $\boldsymbol \theta_k^{(i)}$, the equation $\nabla_{\theta_k} \mathcal{Q}(\boldsymbol \theta | \boldsymbol \theta^{(t)}) = 0$ has to be solved. Now first term in the equation \ref{eq:LogLik} does not depend on $\boldsymbol \theta_k$ so it can be ignored 
+
+\begin{equation}
+	\nabla_{\theta_k} \sum_{i=1}^N \sum_{k=1}^K h_k^{(i)}\mathtt{ln}p(\mathbf{x}^{(i)} | \boldsymbol \theta_k).
+\end{equation}
+
+Substituting $p(\mathbf{x}^{(i)} | \boldsymbol \theta_k)$ with a multidimensional Gaussian distribution and deriving with regards to $\boldsymbol \mu_k$ and $\boldsymbol \sigma_k^2$ new parameters are calculated
+
+\begin{equation}
+	\boldsymbol \mu_k^{(t+1)} = \frac{\sum_ih_k^{(i)}x^{(i)}}{\sum_ih_k^{(i)}} 
+\end{equation}
+
+\begin{equation}
+	(\boldsymbol \sigma^2)_k^{(i)} = \frac{\sum_ih_k^{(i)}(x^{(i)} - \mu_k^{(t+1)})(x^{(i)} - \mu_k^{(t+1)})^T}{{\sum_ih_k^{(i)}}}.
+\end{equation}
+
+%---------------------------------------------%
+%                                             %
+%                 THRESHOLD                   %
+%                                             %
+%---------------------------------------------%
+
+\subsection{Threshold estimation}
+
+Once histogram has been approximated with two Gaussian functions, obtained functions are used to find a threshold. Such approximation is illustrated in figure \ref{img:Approx}. A Gaussian with a lower mean is assumed to model the background. By examining its variance, the threshold is estimated. The threshold is now defined as a distance from the mean to a point where two Gaussian are equally probable. Additional restriction that has to be satisfies is that this point should be placed between the means of Gaussians. The principle used for calculating the threshold is illustrated in figure \ref{img:Thr}. \\
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.4]{Figures/segmentation/temp_hist_prez}
+		\label{img:Approx}
+		\caption{Approximation of an image histogram}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.4]{Figures/segmentation/approx_hist_thr}
+		\label{img:Thr}
+		\caption{A calculation of a threshold}
+	\end{center}
+\end{figure}
+
+The point of using the background segmentation step is to overcome a problem of undetected cells that expose a low intensity. To evaluate this step, the optimal threshold for each image in dataset was determined manually. The evaluation was perform in two ways - on object and pixel level. First, the number of detected cells was used as the number of cells in each image is known in advance. Second, segmented region were compared to the ground truth. As a measure of similarity \textit{precision} is used - number of pixels in segmented regions that is contained in the ground truth segmentation divided by the number of pixels in the ground truth segmentation. This measure should indicate a similarity of obtained segmentation to a manually segmented cells. \\
+
+Table \ref{tab:Object} summarizes the object level results. The results show that the Region growing approach usually detects more objects than contained in the ground truth segmentation. Those extra object detected by the proposed approach are actually partial cells that were removed from the ground truth segmentation. The presences of those partial cells demonstrates the advantages and sensitivity of region growing, but also raises a question should those cells be eliminated from further process or used as a \textit{fully observed} cells.
+
+
+%------------------------------------------------------%
+%                                                      %
+%               PRIOR POSITIONING                      %
+%                                                      %
+%------------------------------------------------------%
+
+\section{Positioning a prior}
+
+Once the background has been found, we have a rough estimate of cell positions. Still, a lot of cells overlap. In order to split them, we will make use of circularity properties of the cells. If circles of cells could be detected, or at least circular parts of cells, they might be split. To detect circles Hough transformation is used.
+
+\subsection{Hough transformation for circles}
+
+Hough transform is a general voting procedure used in Computer vision. The outline of the method is given in algorithm \ref{alg:Hough}. It discretize a parameter space and assigns every bin a number of votes proportional to the number of edges in an image that could be generated with that specific bin parameters. In our case, each bin represents one candidate circle in an image with equation 
+
+\begin{equation}
+	\mathcal{H}(\hat{x}, \hat{y}, r) = (\hat{x} - x)^2 + (\hat{y} - y)^2 = r^2,
+\end{equation}
+
+where  $\hat{x}$ and $\hat{y}$ represent the origin of a circle and $r$ its radius. Now every edge point in an image \textit{votes} for every bin that could have generated it, under assumption that the edge is a part of a circle. \\
+
+\begin{algorithm}
+	\caption{Hough Transform}
+ 	\label{alg:Hough}
+ 	\begin{algorithmic}[1]
+ 	\Function{Hough Transformation}{}
+ 		\State initialize accumulator $\mathcal{H}$ to all zeros
+ 		\For{ each edge in image }
+ 			\State increment every cell $\mathcal{H}(x,y,r)$ which could be the center of a circle
+ 		\EndFor
+ 		\State search for local maxima cells of $\mathcal{H}$
+ 	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+After voting, every local maximum is selected as a circle. Additionally, every vote could be weighted proportionally to its magnitude. Note that not all local maxima are actual circles. Although quite straightforward, the method can easily become unfeasible. Searching for all radius's is obviously unfeasible for large images, so any restriction on circle size range is most certainly helpful. To help the search, radius is limited to a range of minimal to the largest radius found in the data set. \\
+
+Another problem with Hough transformation is its sensitivity to noise. If we assume there is an uniform noise in an image, it is easy to conclude that might imply false circles over an image. Methods to overcome that problem usually include better discretization of parameters or smoothing in the accumulator by incrementing neighboring bins, but for fully automated application this is not suitable solution. Instead, information about background extracted in the previous step could be used. As we can obtain background quite successfully, every circle with a center in the background region can be removed. so as every other circle which has similar properties as the background circles. As a criteria here, a mean intensity in the green channel is used - every circle with a mean intensity lower than the highest mean intensity found in the background is removed. Figure \ref{fig:Hough} illustrates that selection. Now each circle serves as a seed point for precise segmentation of contours and splitting overlapping cells.
+
+\begin{figure}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+			\includegraphics[scale=0.13]{Figures/segmentation/circles_no_selection}
+			\\ (a)
+		\end{center}	
+	\end{minipage}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+			\includegraphics[scale=0.13]{Figures/segmentation/circles_after_selection}
+			\\ (b)
+		\end{center}
+	\end{minipage}
+	\caption{Hough transformation with all detected circles (a) and after removing background circles (b)}
+	\label{fig:Hough}
+\end{figure}
+
+%-----------------------------------------------------%
+%                                                     %
+%             SEGMENTATION                            %
+%                                                     %
+%-----------------------------------------------------%
+
+\section{Precise contours with Morphological snakes}
+
