@@ -25,7 +25,86 @@ The idea is to approximate the histogram with a mixture of 2 Gaussian functions 
 
 Once histogram has been approximated with two Gaussian functions, the estimated means and variances have taken as features for the classification. SVM with radial basis functions as kernel function has been trained for the task. Evaluation is performed using a 10-fold cross validation. \\
 
+
+
+%--------------------------------------------------%
+%                                                  %
+%               SVM                                %
+%                                                  %
+%--------------------------------------------------%
+
+
 \subsection{Support Vector Machine}
+
+
+Support vector machine is a very popular machine learning technique. It is a representative of a more general class of \textit{kernel methods}. The most interesting property of the support vector machine is that it tries to find the \textit{optimal hyperplane} that separates classes. Consider a two-class case. The sample is $\mathcal{D} = \{ \mathbf{x}^{(i)}, y^{(i)} \}_{i=1}^N$ where $y^{(i)} = 1$ if $\mathbf{x}^{(i)} \in \mathcal{C}_1$ and $y^{(i)} = -1$ if $\mathbf{x}^{(i)} \in \mathcal{C}_2$. We want to find a margin $\mathbf{w}$ so that
+
+\begin{equation*}
+	\mathbf{w}^T\mathbf{x}^{(i)} + w_o \geq +1 \quad \mathtt{for} \quad y^{(i)} = 1
+\end{equation*}
+
+\begin{equation*}
+	\mathbf{w}^T\mathbf{x}^{(i)} + w_o \leq -1 \quad \mathtt{for} \quad y^{(i)} = -1
+\end{equation*}
+
+or simplified 
+
+\begin{equation*}
+	y^{(i)}(\mathbf{w}^T\mathbf{x}^{(i)} + w_0) \geq 1.
+\end{equation*}
+
+The support vector machine extends the \textit{basic} hyperplane requirement - setting the instances on the right side of the hyperplane - by trying to maximize the margin - the distance from the hyperplane to the instances closest to it. So, the \textit{optimal separating hyperplane} is the one that maximizes the margin. \\
+
+The distance of $\mathbf{x}^{(i)}$ to the hyperplane equals to 
+
+\begin{equation}
+	\frac{ | \mathbf{w}^T\mathbf{x}^{(i)} - w_0 | }{ \Vert \mathbf{w} \Vert}.
+\end{equation}
+
+Finding the maximal margin can be expressed as
+
+\begin{equation}
+	\frac{y^{(i)}(\mathbf{w}^T\mathbf{x} - w_0)}{\Vert \mathbf{w} \Vert} \geq \rho, \forall i,
+\end{equation}
+
+i.e., we want the margin to be at least $\rho$. As there are infinitely many solutions that can be obtained by scaling $\mathbf{w}$, we fix the $\rho \Vert \mathbf{w} \Vert = 1$ and minimize $\Vert \mathbf{w} \Vert$ to maximize the margin. The problem can now be written in a form of quadratic optimization problem
+
+\begin{align*}
+	\min_{\mathbf{w}, w_0} & \quad \frac{1}{2} \Vert \mathbf{w} \Vert \\
+	\mathtt{subject \ to} & \quad  y^{(i)} \left ( \mathbf{w}^T\mathbf{x} + w_0  \right ) \geq 1.
+\end{align*}
+
+Now there will be instances that are $\frac{1}{\Vert \mathbf{w} \Vert}$ away from the hyperplane and the total margin equals to $\frac{2}{\Vert \mathbf{w} \Vert}$. \\
+
+If the problem is not linearly separable, one trick is to map the problem to a new space, with more dimension that the original space, by using nonlinear basis functions. It is generally the case that higher dimensional representation is easier to separate. One such mapping function is the \textit{radial basis function or gps or google maps}. 
+
+
+%---------------------------------------%
+%                                       %
+%                RBF                    %
+%                                       %
+%---------------------------------------%
+ 
+\subsection{Radial basis functions}
+
+Radial basis functions are an instance of a \textit{local representation}, where fora given input, only a few factors are \textit{active}. It is in a way a partition of a space so that \textit{locally tuned} partitions are selective to only certain inputs. \\
+
+With the concept of local partitioning we need to define a measure of similarity between an input $\mathbf{x}^{(i)}$ and the local clusters $\boldsymbol \mu^1, \ldots, \boldsymbol \mu^n$. The radial basis functions are defined as
+
+\begin{equation}
+	\mathbf{r}(\mathbf{x}^{(i)}, \boldsymbol \mu^k) = exp \left (- \frac{\Vert \mathbf{x}^{(i)}  - \boldsymbol \mu^k \Vert}{2\sigma_k^2} \right ),
+\end{equation} 
+
+that is, it uses the Euclidean distance as a measure of similarity and Gaussian function as a response function. The response function express a property of having a maximum where $\mathbf{x}^{(i)} = \boldsymbol \mu^k$ and decreasing as they get less similar. 
+
+
+
+
+%--------------------------------------%
+%                                      %
+%           EVALUATION                 %
+%                                      %
+%--------------------------------------%
 
 \subsection{Results}
 
