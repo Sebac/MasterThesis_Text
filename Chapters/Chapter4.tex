@@ -439,3 +439,83 @@ The mean operator is now defined as a composition of two morphological operators
 \end{equation}
 
 \subsection{Morphological snakes}
+
+It can be proven that above mentioned morphological operators - dilation, erosion and the curvature flow operator - behave infinitesimally like PDEs \ref{eq:PDE1} and \ref{eq:PDE2}. In that context, given the curvature evolution function which includes both terms \ref{eq:PDE1} and \ref{eq:PDE2}, those operators may be used to evolve the contour by approximating the solution to the PDEs. \\
+
+The ACWE uses an energy functional for image segmentation which takes into account the content of the interior and exterior regions of the curve. The function of a curve $\mathcal{C}$ used in the ACWE looks like
+
+\begin{equation}
+	\begin{split}
+		F(c_1,c_2, \mathcal{C}) & = \mu \cdot \mathtt{length}(\mathcal{C}) + \upsilon \cdot \mathtt{area}(\mathtt{inside}(\mathcal{C})) \\
+	 & + \lambda_1 \int_{\mathtt{inside}(\mathcal{C})} \Vert I(\mathbf{x}) - c_1 \Vert d\mathbf{x} +   \lambda_2 \int_{\mathtt{outside}(\mathcal{C})} \Vert I(\mathbf{x}) - c_2 \Vert d\mathbf{x}
+	\end{split}
+	\label{eq:Functional}
+\end{equation}
+
+where $I$ represent the image and the non-negative parameters $\mu, \upsilon, \lambda_1, \lambda_2$ controls the strength of factors. The solution is now found as 
+
+\begin{equation}
+	\min_{c_1,c_2, \mathcal{C}} F(c_1,c_2, \mathcal{C}),
+\end{equation}
+
+which is a bit challenging problem. The problem could be relaxed by calculating the parameters given a fixed contour. The values $c_1$ and $c_2$ that minimize $F$ are given as the mean of the values of $I$ inside and outside of the contour
+	
+\begin{equation}
+	c_1(\mathcal{C}) = \frac{\int_{\mathtt{inside}(\mathcal{C})}I(\mathbf{x})d\mathbf{x}}{\int_{\mathtt{inside}(\mathcal{C})}d\mathbf{x}}
+\end{equation}
+
+\begin{equation}
+	c_2(\mathcal{C}) = \frac{\int_{\mathtt{outside}(\mathcal{C})}I(\mathbf{x})d\mathbf{x}}{\int_{\mathtt{outside}(\mathcal{C})}d\mathbf{x}}.
+\end{equation}
+
+The evolution of the contour is now given with the Euler-Lagrange equation of functional \ref{eq:Functional}
+
+\begin{equation}
+	\begin{split}
+		\frac{\partial u}{\partial t} & = | \nabla u | \left ( \mu \cdot \mathtt{div} \left ( \frac{\nabla u}{|\nabla u|}  \right ) - \upsilon - \lambda_1(I - c_1) -\lambda_2 (I - c_2) \right ) .
+	\end{split}
+\end{equation}
+
+This equation specifies the direction contour should evolve to minimize the functional $F$ in a steepest descent manner. The factor 
+
+\begin{equation}
+	|\nabla u| \cdot \upsilon
+\end{equation} 
+
+is called the \textit{balloon force} and it determines the strength of fragments in the contour : when this term is strong the fragment of the contour is far from the target region and it reduces as the fragment approaches the target region. This factor is approximated with the dilation and erosion operators and it represent the approximation of the PDE \ref{eq:PDE1}. \\
+
+The factor
+
+\begin{equation}
+	| \nabla u | \cdot \mu \cdot \mathtt{div} \left ( \frac{\nabla u}{|\nabla u|}  \right )
+\end{equation}
+
+is called the \textit{smoothing force} which represent a weighted version of the mean curvature divergence and corresponds to the PDE \ref{eq:PDE2}. The $\mu$ controls the strength of smoothing operator at each point. This factor is approximated with the mean curvature operator. \\
+
+The remaining of the equation determines should a point be included in or excluded from the current region, or stay where it is. If $\lambda_1(I - c_1) < \lambda_2 (I - c_2) $ at $\mathbf{x}$, then $\mathbf{x}$ should be included in the current region, or excluded if the inequality is reversed. If $\lambda_1(I - c_1) = \lambda_2 (I - c_2) $ $\mathbf{x}$ should stay where it is. \\
+
+Finally, the ACWE algorithm is given with these three successive steps
+
+\begin{equation}
+	u^{n + \frac{1}{3}}(\mathbf{x}) = 
+	\begin{cases}
+		(D_hu^n)(\mathbf{x}) & \text{if } \upsilon < 0 \\
+		(E_hu^n)(\mathbf{x}) & \text{if } \upsilon > 0 \\
+		u^n(\mathbf{x}) & \text{otherwise}
+	\end{cases}
+\end{equation}
+
+\begin{equation}
+	u^{n + \frac{2}{3}}(\mathbf{x}) = 
+	\begin{cases}
+		1 &\text{if } |\nabla u^{n + \frac{1}{3}}|(\lambda_1(I - c_1)^2 < \lambda_2 (I - c_2)^2)(\mathbf{x}) < 0 \\
+		0 &\text{if } |\nabla u^{n + \frac{1}{3}}|(\lambda_1(I - c_1)^2 < \lambda_2 (I - c_2)^2)(\mathbf{x}) > 0 \\
+		u^{n + \frac{1}{3}} & \text{otherwise}
+	\end{cases}
+\end{equation}
+
+\begin{equation}
+	u^{n + 1}(\mathbf{x}) = \left ( (SI_h \ocircle IS_h)^{\mu} u ^{n + \frac{2}{3}}  \right )(\mathbf{x}).
+\end{equation}
+
+Only question that remains to be answered is how to set the initial curve. As the initial curve the circles detected in the previous step are used.
