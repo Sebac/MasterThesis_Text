@@ -222,3 +222,5 @@ pip-log.txt
 *.aux
 *.toc
 *.loc
+*.lof
+*.out

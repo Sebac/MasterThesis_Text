@@ -356,3 +356,86 @@ Another problem with Hough transformation is its sensitivity to noise. If we ass
 
 \section{Precise contours with Morphological snakes}
 
+Morphological snakes or active contour methods are one very popular computer vision method. This method employs a energy optimization approach where it tries to minimize an energy functional induced by a curve.  The minimum is usually find by a steepest descent approach. \\
+
+Here we are interested in a specific version of morphological snakes called \textit{Active contour without edges} (ACWE). The ACWE doesn't need well defined boarders and it is less sensitive to the initial configuration and model parameters. Due to a noisy nature of images used in this process, the ACWE has a potential to successfully deal with the noise. The Active contour methods try to adjust the starting contour to the local minimum by iteratively solving a time-dependent partial differential equations (PDE). However, solving the PDE is computationally costly and often has a stability issues. \\
+
+The most efficient approaches avoid to solve the PDE directly. The key idea that allows the simplification of the problem is that the curve is implicitly  represented by the set of image points neighboring the target area. The evolution of curve is then achieved by elimination and introduction of points in the target set. Any geometric property can be approximated with local operations on the set of points. Those methods are based on mathematical morphology and make use of morphological operators such as \textit{erosion} and \textit{dilation} to approximate the PDEs. For the equivalence of differentiation and morphological operators see \cite{Pami2013}.
+
+
+
+
+\subsection{Background }
+
+This section summarizes the most important parts of curve evolution with PDEs and morphological operators.
+
+
+
+
+\subsubsection{Contour evolution with PDEs}
+
+Differential operators are key to contour evolution with PDEs -- the change of contour is given by a differential operator. \\
+
+Let $\mathcal{C}$ be a parametrized 2D curve over time so that $\mathcal{C}: \mathbb{R}^+ \times [0,1] \rightarrow \mathbb{R}^2 : (t,p) \rightarrow \mathcal{C}(t,p)$. A differential operator $\mathcal{L}$ defines the curve evolution with PDE $\mathcal{C}_t = \mathcal{L}(\mathcal{C})$. The result of evolution depends on the differential operator. There are many forms in which it can be written but one popular is $\mathcal{L} = \mathcal{F} \cdot \mathcal{N}$, where $\mathcal{N}$ is the normal to the curve and $\mathcal{F}$ is a scalar field which determines the speed of evolution. \\
+
+A particularly interesting form is the one in which $\mathcal{L}$ is defined with $\mathcal{F} \in \{ -1,1 \}$. Such operator evolves the curve along its normal direction with constant speed. If $\mathcal{F}$ takes the form of the Euclidean curvature of $\mathcal{C}$, then the problem is convex so it will converge to the optimal solution. \\
+
+With the explicit representation of curve certain problems occur. It is not easy to deal with topological changes and re-parameterization of the curve. An alternative to the explicit representation is an implicit one. Let $u: \mathbb{R}^+ \times \mathbb{R}^2 \rightarrow \mathbb{R}$ an implicit representation of $\mathcal{C}$ such that $\mathcal{C}(t) = \{ (x,y); u(t,(x,y)) = 0 \}$. When $\mathcal{C}_t = \mathcal{F} \cdot \mathcal{N}$, the curvature evolution of any function $u(x,y)$ which embeds the curve is $\frac{\partial u}{\partial t} = \mathcal{F}|\nabla u|$. \\
+
+With that in mind, the PDEs that are of interest to the curvature evolution are
+
+\begin{equation}
+	\frac{\partial u}{\partial t} = \pm |\nabla u|
+	\label{eq:PDE1}
+\end{equation}
+
+\begin{equation}
+	\frac{\partial u}{\partial t} = div \left ( \frac{\nabla u}{|\nabla u|}  \right ) \cdot |\nabla u|
+	\label{eq:PDE2}
+\end{equation}
+
+where $\mathcal{F} = \pm 1$ in \ref{eq:PDE1} and $\mathcal{F} = \mathcal{K}$ for \ref{eq:PDE2}. $\mathcal{K}$ denotes the Euclidean curvature.
+
+
+
+\subsubsection{Morphological operators} 
+
+Morphological operators are monotone operators that are translation and contrast invariant. Every morphological operator $T$ can be represented in a $sup-inf$ representation of form 
+
+\begin{equation}
+	(T_hu)(\mathbf{x}) = \sup_{B \in \mathcal{B}} \inf_{\mathbf{y} \in \mathbf{x} + hB}u(\mathbf{y})
+\end{equation}
+
+or a dual $inf-sup$ form
+
+\begin{equation}
+	(T_hu)(\mathbf{x}) = \inf_{B \in \mathcal{B}} \sup_{\mathbf{y} \in \mathbf{x} + hB}u(\mathbf{y}),
+\end{equation}
+
+where $\mathcal{B}$ is a set of structuring elements that uniquely defines the operator and $h$ is the size of operator. \\
+
+The most common morphological operators are dilation and erosion. A dilation $D_h$ with radius $h$ of function $u$ is defined as 
+
+\begin{equation}
+	D_hu(\mathbf{x}) = \sup_{\mathbf{x} \in hB(0,1)} u(\mathbf{x} + \mathbf{y})
+\end{equation}
+
+while the erosion has a similar form
+
+\begin{equation}
+	E_hu(\mathbf{x}) = \inf_{\mathbf{x} \in hB(0,1)} u(\mathbf{x} + \mathbf{y}),
+\end{equation}
+
+ where $B(0,1)$ is a ball of radius 1 centered at 0 and $h$ is the scaling factor.
+ 
+\subsubsection{Curvature operator}
+
+A curvature operator works as follows. Let $SI_h$ and $IS_h$ be respectively $sup-inf$ and $inf-sup$ morphological operators with a base $\mathcal{B}^2 = \{ [-1,1]_{\theta} \subset \mathbb{R}^2 : \theta \in [0, \pi) \}$. The base is made of all segments of length 2 centered at the origin. It can be proved that the successive application of \textit{a mean operator}, for a very small $h$, is equivalent to the curvature flow of PDE \ref{eq:PDE2}. \\
+
+The mean operator is now defined as a composition of two morphological operators
+
+\begin{equation}
+	T_{h/2}^2 \ocircle T_{h/2}^1 \approx \frac{T_h^2u + T_h^1u}{2}.
+\end{equation}
+
+\subsection{Morphological snakes}
