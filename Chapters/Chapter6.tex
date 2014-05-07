@@ -16,7 +16,17 @@ Once cells have been segmented and their fluorescence intensities classified, th
 
 In \cite{FoggiaBenchmarks2013}, Foggia et al. summarizes the description of interesting properties for each type of cells. Table \ref{tab:Desc} provides the description of every cell type. The problem with such descriptions is that they are quite unstructured and sometimes ubiquitous. For example, when speaking about organelles contained in a cell's body, they refer to dark organelles as \textit{granules} and bright organelles as \textit{speckles}. \\
 
-In order to develop a method that will generate such descriptions automatically, those description should be structured first. Tables \ref{tab:Vpata} and \ref{tab:Vpatb} gives a description of each pattern in a more structured way. Several important visual patterns were identified. 
+In order to develop a method that will generate such descriptions automatically, those description should be structured first. Tables \ref{tab:Vpata} and \ref{tab:Vpatb} gives a description of each pattern in a more structured way. The appearance of patterns depends on the fluorescence intensity of an image. Several important visual patterns were identified. \\
+
+The first property describes the shape of a cell. It can take two possible values - \textit{circular} and \textit{irregular}. The motivation for this feature is the observation that the irregular shape is very characteristic for the cytoplasmatic class, while all other classes have a circular shape. \\
+
+The second property incorporates the knowledge about the mitotic cells found on the same image. The medical literature suggested that the mitotic cells, although there is no a general consensus about the importance of the mitotic cells, might be informative for discriminating between certain classes. The mitotic cells can appear in three different patterns - \textit{neutral} with no specific characteristics, \textit{bright center} of \textit{dark center}. \\
+
+The following property describes the appearance of organelles in a cell's body, if any present. This property is very discriminatory towards nucleolar and centromere which have bright organelles, speckled which contain dark organelles while others don't have any organelles. \\
+
+The number of organelles is also an informative property. The centromere class has significantly larger number of organelles contained in a body. The centromene, nucleolar and speckled class relatively small number of organelles expressed in the body, while the homogeneous and cytoplasmatic class don't have any organelles. \\
+
+For certain classes, the texture could be quite informative. Although most of the classes have a relatively smooth texture, some classes have some very distinguishing properties. On images with the positive fluorescence intensity, the cytoplasmatic class has characteristic blob. Also, the coarse speckled class has a very specific texture that looks like a \textit{sea surface}. \\
 
 
 
@@ -24,7 +34,6 @@ In order to develop a method that will generate such descriptions automatically,
 	\begin{center}
 	\caption{Description of cell types}
 	\label{tab:Desc}
-	
 	\begin{tabular}{|m{2.3cm}|m{2.1cm}|m{8cm}|}
 		\hline
 		\textbf{pattern type} & \textbf{example} & \textbf{description} \\
@@ -45,7 +54,8 @@ In order to develop a method that will generate such descriptions automatically,
 \begin{table}
 	\caption{Identified visual patterns - positive intensity}
 	\label{tab:Vpata}
-	\begin{tabular}{|m{2.2cm}|m{1.7cm}|m{2cm}|m{2cm}|m{1.2cm}|m{2cm}|m{1.2cm}|}
+	\small
+	\begin{tabular}{|m{2.2cm}|m{1.4cm}|m{1.5cm}|m{1.5cm}|m{1.4cm}|m{1.6cm}|m{1.4cm}|}
 		\hline
 		\textbf{pattern type} & \textbf{shape} & \textbf{mitotic cell} & \textbf{organelle type} & \textbf{organelle count} & \textbf{texture} & \textbf{speckles} \\ \hline
 		centromere & circular & X & bright on dark & lots & sparkly  & yes \\ \hline
@@ -55,12 +65,14 @@ In order to develop a method that will generate such descriptions automatically,
 		fine speckled & circular & X & neutral & none & smooth & no \\ \hline
 		coarse speckled & circular & X & dark on bright & few & sparkly & yes \\ \hline
 	\end{tabular}
+	\normalsize
 \end{table}
 
 \begin{table}
 	\caption{Identified visual patterns - intermediate intensity}
 	\label{tab:Vpatb}
-	\begin{tabular}{|m{2.2cm}|m{1.7cm}|m{2cm}|m{2cm}|m{1.2cm}|m{2cm}|m{1.2cm}|}
+	\small
+	\begin{tabular}{|m{2.2cm}|m{1.4cm}|m{1.5cm}|m{1.5cm}|m{1.4cm}|m{1.6cm}|m{1.4cm}|}
 		\hline
 		\textbf{pattern type} & \textbf{shape} & \textbf{mitotic cell} & \textbf{organelle type} & \textbf{organelle count} & \textbf{texture} & \textbf{speckles} \\ \hline
 		centromere & circular & X & bright on dark & lots & sparkly  & yes \\ \hline
@@ -70,6 +82,7 @@ In order to develop a method that will generate such descriptions automatically,
 		fine speckled & circular & X & dark on bright & none & smooth & no \\ \hline
 		coarse speckled & circular & X & dark on bright & few & sparkly & yes \\ \hline
 	\end{tabular}
+	\normalsize
 \end{table}
 
 
