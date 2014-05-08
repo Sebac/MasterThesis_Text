@@ -20,7 +20,9 @@ In order to develop a method that will generate such descriptions automatically,
 
 The first property describes the shape of a cell. It can take two possible values - \textit{circular} and \textit{irregular}. The motivation for this feature is the observation that the irregular shape is very characteristic for the cytoplasmatic class, while all other classes have a circular shape. \\
 
-The second property incorporates the knowledge about the mitotic cells found on the same image. The medical literature suggested that the mitotic cells, although there is no a general consensus about the importance of the mitotic cells, might be informative for discriminating between certain classes. The mitotic cells can appear in three different patterns - \textit{neutral} with no specific characteristics, \textit{bright center} of \textit{dark center}. \\
+The property \textit{speckles} denotes are there any objects present in the cell or not. \\
+
+Incorporating the knowledge about the mitotic cells found on the same image can be quite useful. The medical literature suggested that the mitotic cells, although there is no a general consensus about the importance of the mitotic cells, might be informative for discriminating between certain classes. The mitotic cells can appear in four different patterns - \textit{neutral} with no specific characteristics, \textit{bright center}, \textit{bright center} with sparkles or \textit{dark center}. \\
 
 The following property describes the appearance of organelles in a cell's body, if any present. This property is very discriminatory towards nucleolar and centromere which have bright organelles, speckled which contain dark organelles while others don't have any organelles. \\
 
@@ -94,9 +96,15 @@ For certain classes, the texture could be quite informative. Although most of th
 
 \section{Deep learning}
 
+Deep learning is a relatively new approach in machine learning which is often referred  as \textit{Representation learning}. It is built on \textit{Artificial neural networks} and imitates human brain in representing the data. The motivation for learning representation is quite clear -- the form in which data is represented is important. The success of our classifier depends on the quality of data used for training. \\
 
+The key concept used in Deep learning is a \textit{hierarchical representation of data}. Deep learning aims at learning feature hierarchies with features from higher levels of the hierarchies formed by composing a lower level features. Automatically learning features at multiple levels of abstraction allow a system to learn complex functions representing the data, without depending completely on human-crafted features. That is particularly important because humans often do not know how to express higher-level abstraction in terms of raw sensory input. The ability to automatically learn powerful features will become increasingly important as the amount of data and range of applications to machine learning methods continues to grow. \\
 
+Consider a computer vision framework, for example. Raw input corresponds to raw pixels of an image. The idea of Deep learning is to gradually \textit{abstract} the pixels to higher level features. Raw pixels are further combined to form edges, edges are then abstracted to specific forms and so on. The focus of deep architecture learning is to automatically discover such abstractions, from the lowest level features to the highest level concepts. Ideally, we would like learning algorithms that enable this discovery with as little human effort as possible. \\
 
+Depth of architecture refers to the number of levels of composition of non-linear operations in the function learned. Most of current machine learning algorithm correspond to \textit{shallow architectures} while the brain is organized in a \textit{deep architectures}, with multiple levels of abstraction. \\
+
+Another important thing to notice is that the information is \textit{distributed}: in the brain analogy, the information is not localized in a particular neuron but distributed across many. Each level of abstraction found in the brain consists of the \textit{activation} (neural excitation) of a small subset of a large number of features that are, in general, not mutually exclusive. In addition to being distributed, it appears that the brain uses a representation that is \textit{sparse}: only a around 1-4\% of the neurons are active together at a given time.
 
 %--------------------------------------------%
 %                                            %
@@ -105,6 +113,10 @@ For certain classes, the texture could be quite informative. Although most of th
 %--------------------------------------------%
 
 \section{Deep belief networks}
+
+Deep belief networks is a specific instance of deep learning approach.
+
+\subsection{Restricted Boltzmann Machines}
 
 
 
