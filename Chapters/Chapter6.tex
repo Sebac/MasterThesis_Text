@@ -5,7 +5,9 @@
 \label{Chapter6} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 
-Once cells have been segmented and their fluorescence intensities classified, there are assigned with features that describe a human perception of the cells' properties. The interesting properties are summarized in the following section. 
+Once cells have been segmented and their fluorescence intensities classified, there are assigned with features that describe a human perception of the cells' properties. The interesting properties are summarized in the following section. \\
+
+This step maps \textit{pixel features} to \textit{symbolic features} used to describe the cells. Those symbolic features are learned by \textit{Deep belief network}.
 
 
 %----------------------------------------------------------------------------------------
@@ -22,7 +24,7 @@ The first property describes the shape of a cell. It can take two possible value
 
 The property \textit{speckles} denotes are there any objects present in the cell or not. \\
 
-Incorporating the knowledge about the mitotic cells found on the same image can be quite useful. The medical literature suggested that the mitotic cells, although there is no a general consensus about the importance of the mitotic cells, might be informative for discriminating between certain classes. The mitotic cells can appear in four different patterns - \textit{neutral} with no specific characteristics, \textit{bright center}, \textit{bright center} with sparkles or \textit{dark center}. \\
+Incorporating the knowledge about the mitotic cells found on the same image can be quite useful. The medical literature suggested that the mitotic cells, although there is no a general consensus about the importance of the mitotic cells, might be informative for discriminating between certain classes. The mitotic cells can appear in four different patterns - \textit{neutral} with no specific characteristics, \textit{bright center},  \textit{bright center} with sparkles or \textit{dark center}. \\
 
 The following property describes the appearance of organelles in a cell's body, if any present. This property is very discriminatory towards nucleolar and centromere which have bright organelles, speckled which contain dark organelles while others don't have any organelles. \\
 
@@ -114,13 +116,162 @@ Another important thing to notice is that the information is \textit{distributed
 
 \section{Deep belief networks}
 
-Deep belief networks is a specific instance of deep learning approach.
+Deep belief network is a specific instance of deep learning approach. It can be seen as a multi-layer generative model where each layer consists of multiple nodes, similar to a neural network. First layer, often referred as \textit{visible layer}, represents the raw input data, while every higher-level layer is referred as a \textit{hidden layer}. The main difference between deep belief networks and neural networks is the \textit{unsupervised} pre-training phase of a deep belief network. \\
+
+To train the network in unsupervised way, the network is represented using the \textit{Restricted Boltzmann machines}.
+
+
+
+
 
 \subsection{Restricted Boltzmann Machines}
 
+The Boltzmann machines are an instance of \textit{energy-based} models, in which a scalar energy is associated  to each configuration of variables. Learning in such settings corresponds to modifying the energy function so that it reflects certain properties. Energy-based probabilistic models define a probability distribution over a variable through an energy function
+
+\begin{equation}
+	P(\mathbf{x}) = \frac{e^{-\mathtt{Energy}(\mathbf{x})}}{Z}.
+\end{equation}
+
+The normalization factor $Z$ is called the \textit{partitioning function} by analogy with physical systems
+\begin{equation}
+	Z = \sum_{\mathbf{x}}e^{-\mathtt{Energy}(\mathbf{x})}
+\end{equation}
+ with a sum running over the input space. The energy function is usually formulated as a sum of term $f_i$
+ 
+ \begin{equation}
+ 	\mathtt{Energy}(\mathbf{x}) = \sum_i f_i(\mathbf{x}),
+ \end{equation}
+ 
+ where each $f_i$ evaluates some properties of an input vector $\mathbf{x}$. \\
+ 
+ In a case of hidden variables, probability is expressed as 
+ 
+ \begin{equation}
+	P(\mathbf{x}, \mathbf{h}) = \frac{e^{-\mathtt{Energy}(\mathbf{x}, \mathbf{h})}}{Z},
+\end{equation}
+ 
+ where probability of the observed part can be calculated by marginalization
+ 
+ \begin{equation}
+	P(\mathbf{x}) = \sum_{\mathbf{h}}\frac{e^{-\mathtt{Energy}(\mathbf{x}, \mathbf{h})}}{Z}.
+\end{equation}
+
+Conditional probability distributions can be efficiently represented in the energy-based framework
+
+\begin{equation}
+	P(y| \mathbf{x}) = \frac{e^{-\mathtt{Energy}(\mathbf{x},y)}}{\sum_y e^{-\mathtt{Energy}(\mathbf{x},y)}}.
+\end{equation}
+
+The Boltzmann machine defines the energy functional as a second-order polynomial
+
+\begin{equation}
+	\mathtt{Energy}(\mathbf{x}, \mathbf{h}) = -\mathbf{b}^T\mathbf{x} - \mathbf{c}^T\mathbf{h} - \mathbf{h}^T\mathbf{W}\mathbf{x} - \mathbf{x}^T\mathbf{U}\mathbf{x} - \mathbf{h}^T\mathbf{V}\mathbf{h}
+	\label{eq:BoltzmannEnergy}
+\end{equation}
+
+where $\mathbf{x}$ represents a raw data, $\mathbf{h}$ response of hidden units, $\mathbf{b}_i \text{ and } \mathbf{c}_i$ are the offsets associated with a single element from $\mathbf{x}$ or $\mathbf{h}$ and $W_{ij}, U_{ij} \text{ and } V_{ij}$ are weights associated with each pair of units. \\
+
+The \textit{restriction} in the Restricted Boltzmann machines comes from connections between layer. In the Restricted Boltzmann machine there are no connections within a layer, only connections between successive layer. The output of each layer serves as the input for the successive layer.  This restriction simplifies the equation \ref{eq:BoltzmannEnergy} and eliminates the factors $U$ and $V$. The equation \ref{eq:BoltzmannEnergy} is now
+
+\begin{equation}
+	\mathtt{Energy}(\mathbf{x}, \mathbf{h}) = -\mathbf{b}^T\mathbf{x} - \mathbf{c}^T\mathbf{h} - \mathbf{h}^T\mathbf{W}\mathbf{x} 
+	\label{eq:RestBoltzmannEnergy}
+\end{equation}
+
+and has a property that is shares parameterization with individual layers of a Deep belief networks, which makes them a perfect building blocks. The restriction is illustrated in figure \ref{img:RestBoltzMach}. Another advantage of the restriction is that it makes calculations of $P(\mathbf{x} | \mathbf{h}) \text{ and } P(\mathbf{h} | \mathbf{x})$ tractable because they factorize.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.5]{Figures/describing/restricted_boltzmann_machines}
+	\end{center}
+	\caption{An illustration of the Restricted Boltzmann machines}
+	\label{img:RestBoltzMach}
+\end{figure}
+
+
+\subsection{Training the Restricted Boltzmann machines}
+
+Training the Restricted Boltzmann machine is usually done by gradient descent. It turns out that standard gradient of the log-likelihood, although in very simple form, is very hard to estimate. The derivative of the log-likelihood parameterized with the weights $\mathbf{w}$ equals
+
+\begin{align}
+		\frac{\partial p(\mathbf{x})}{\partial \mathbf{w}} & = \sum_n \mathtt{log} \left [ \frac{1}{Z} e ^{-\mathtt{Energy}(\mathbf{x})}  \right ] \\
+		& = N \left [ \left \langle \frac{\partial \mathtt{Energy}(\mathbf{x})}{\partial \mathbf{w}}  \right \rangle_{P(\mathbf{x})} - \left \langle \frac{\partial \mathtt{Energy}(\mathbf{x})}{\partial \mathbf{w}} \right \rangle_n  \right ] \\
+		& = \left \langle \mathbf{x}\mathbf{h} \right \rangle_{data} - \left \langle \mathbf{x}\mathbf{h} \right \rangle_{model}
+\end{align}
+
+where $\langle \rangle$ marks the expectation under the distribution specified with the subscript. The obtained results lead to a very simple rule for updating weights
+
+\begin{equation}
+	\Delta w_{ij} \propto \epsilon \left (  \left \langle x_ih_i   \right \rangle_{data} - \left \langle x_ih_i   \right \rangle_{model}   \right ).
+\end{equation}
+
+Estimating $ \langle x_ih_j \rangle_{data}$ is relatively simple as there are no connections between hidden units is a RBM. Given a random input data $\mathbf{x}$ the binary state $h_j$ of each hidden unit is set to 1 with probability
+
+\begin{equation}
+	p(h_j | \mathbf{x}) = \sigma \left ( b_j + \sum_i x_iw_{ij} \right )
+	\label{eq:CDhid}
+\end{equation}
+where $\sigma$ stands for sigmoid function. $x_ih_j$ is then unbiased sample. Because there is no connections between visible units in a RBM, it is also easy to get an unbiased sample of the state of a visible unit, given a hidden vector
+
+\begin{equation}
+	p(x_i=1 | \mathbf{h}) = \sigma \left ( a_i + \sum_jh_jw_{ij} \right ).
+	\label{eq:CDvis}
+\end{equation}
+
+Getting an unbiased sample of $ \langle x_ih_j \rangle_{model}$ is much more difficult. An efficient method for estimating that distribution is given in \cite{Hinton2002}. This methods starts by assigning the training data to visible layer units. Then, the states of he hidden units are evaluated using equation \ref{eq:CDhid}. Once states for the hidden units have been chosen, the input data is \textit{reconstructed} by setting each $x_i$ to 1 with probability given by equation \ref{eq:CDvis}. The change in weights is then given by 
+
+\begin{equation}
+	\Delta w_{ij} = \epsilon \left (  \left \langle x_ih_i   \right \rangle_{data} - \left \langle x_ih_i   \right \rangle_{model}   \right ).
+\end{equation}
+
+The methods is summarized in Algorithm \ref{alg:RBM}. This assignment could be repeated several times to obtain a better approximation, but just one assignment works surprisingly well. The network is trained the same way layer by layer. \\
+
+Although this approach works fairly well in practice, it is actually a quite crude approximation of the log-probability. It is more closely an approximation of the \textit{Contrastive Divergence} - the difference between two Kullback-Lieber divergences. \\
+
+\subsubsection{Real valued units}
+
+So far, it has been assumed that all units are binary. That has been done for the sake of simplicity. Binary case is easily generalized to a real valued units. The main change is the adjustment of the energy term. For the real values visible units, a Gaussian visible units are popular choice
+
+\begin{equation}
+	\mathtt{Energy}_{G1}(\mathbf{x}, \mathbf{h}) = \sum_{i \in \text{visible}}\frac{(v_i - a_i)^2}{2\sigma_i^2} - \sum_{j \in \text{hidden}} b_jh_j - \sum_{i,j}\frac{v_i}{\sigma_i}h_iw_j
+\end{equation}
+
+where $\sigma_i$ is the standard deviation of the Gaussian noise for visible unit $i$. For real valued units in hidden layers, the energy functional looks like
+
+\begin{equation}
+	\mathtt{Energy}_{G2}(\mathbf{x}, \mathbf{h}) = \sum_{i \in \text{visible}}\frac{(v_i - a_i)^2}{2\sigma_i^2} - \sum_{j \in \text{hidden}} \frac{(h_j - b_j)^2}{2\sigma_j^2} - \sum_{i,j}\frac{v_i}{\sigma_i}\frac{h_j}{\sigma_j}w_j.
+\end{equation}
 
 
 
+
+\begin{algorithm}
+	\caption{Training RBM}
+	\label{alg:RBM}
+	\begin{algorithmic}[1]
+		\Function{trainRBM}{$\mathbf{x_1}, \epsilon, W, \mathbf{b}, \mathbf{c}$}
+		\Repeat
+			\For{all hidden units $i$}
+				\State compute $p(h_{1i}=1|\mathbf{x}_1) = \sigma \left ( c_i + \sum_jW_{ij}x_{1j}  \right )$
+				\State sample $h_{1i} \in \{ 0,1 \}$ for $p(h_i|\mathbf{x}_!)$
+			\EndFor
+			
+			\For{all visible units $j$}
+				\State compute $p(x_{2j}|\mathbf{h}_1) = \sigma \left ( b_j + \sum_iW_{ij}h_{1i} \right )$
+				\State sample $x_{2j} \in \{ 0,1 \}$ from $p(x_{2j}|\mathbf{h}_1)$
+			\EndFor
+			
+			\For{all hidden units $i$}
+				\State compute $p(h_{2i}=1|\mathbf{x}_2) = \sigma \left ( c_i + \sum_jW_{ij}x_{2j}  \right )$
+			\EndFor
+			
+			\State $W \gets W + \epsilon \left ( \mathbf{h}_1 \mathbf{x}_1^T - p(\mathbf{h}_{2\cdot} = 1|\mathbf{x}_2)\mathbf{x}_2^T\right )$
+			\State $\mathbf{b} \gets \mathbf{b} + \epsilon ( \mathbf{x}_1 - \mathbf{x}_2  )$
+			\State $\mathbf{c} \gets \mathbf{c} + \epsilon (\mathbf{h}_1 -  p(\mathbf{h}_{2\cdot} = 1|\mathbf{x}_2))$
+		\Until{converged}
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
 
 %--------------------------------------------%
 %                                            %
@@ -128,5 +279,96 @@ Deep belief networks is a specific instance of deep learning approach.
 %                                            %
 %--------------------------------------------%
 
+\subsection{Supervised fine tuning}
+
+The unsupervised training explained in the previous section discovers interesting patterns in images, but those patterns are same regardless the target class. The network is therefor \textit{fine-tuned} to recognize specific class. \\
+
+Supervised training is performed in a \textit{steepest descent} manner with the \textit{backpropagation} algorithm. The algorithm is summarized in algorithm \ref{alg:Back}. Backpropagation initializes the weights of each unit to the weights obtained by training the Restricted Boltzmann machines and adjusts them in a direction of \textit{gradient}, scaled by a \textit{learning rate} $\eta$. The amount of change is determined with the $\eta$, gradient and the \textit{contribution} of an unit to the error. Error \textit{contributions} are propagated from the output units to hidden ones. 
+
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\Function{Backpropagation}{network, weights}
+			\While{ not converged \textbf{or} maximum number of iterations reached}
+				\For{ each $(\mathbf{x}, \mathbf{y}) \text{ in } \mathcal{D}$}
+					\State calculate an output  $o_u$ of each unit $u$
+					\For{each \textit{output} unit $k$}
+						\State calculate error $\delta_k \gets o_k(1-o_k)(y_k - o_k)$					
+					\EndFor 
+					\For{each \textit{hidden} unit $h$}
+						\State calculate error $\delta_h \gets o_h(1-o_h)\sum_{s \in \mathtt{Downstream}(h)}w_{hs}\delta_s$ 					
+					\EndFor
+					\State adjust the weights $w_{ij}$
+					\Statex \quad \quad $\Dela w_{ij} \gets \eta \delta_i o_j$ 
+					\Statex \quad \quad $w_{ij} \gets w_{ij} - \Delta w_{ij}$
+				\EndFor
+			\EndWhile
+		\EndFunction
+	\end{algorithmic}
+	\caption{Backpropagation}
+	\label{alg:Back}
+\end{algorithm} 
+
 \section{Evaluation}
 
+For each of above mentioned features, except shape and information about the mitotic cells, a Deep belief networks is trained. For shape classification, the segmentation masks are used and classified with SVM as described is Chapter \ref{Chapter5}. The results are summarized in tables \ref{tabs:SymFea}. \\
+
+Obtained results are quite optimistic. Recognition rate of each feature is more than 90 \% accurate. This demonstrates a great potential of deep learning methods for generating symbolic representations, for a specific problems like this one. A bit problematic cases seems to be blob texture recognition, detection of a large number of organelles and detection of dark bodies. By analyzing the misclassified cells, it has been observed that a great majority of misclassified cells come from a low intensity images which was expected. The most of those images represent the edge cases where it was difficult to assign the true class.
+
+\begin{figure}
+	\caption{Symbolic feature mapping}
+	\label{tabs:SymFea}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+		\begin{tabular}{c c| c c c}
+				 & & \multicolumn{3}{c}{True} \\
+			     & & \textbf{bright} & \textbf{neutral} & \textbf{dark} \\
+			    \hline
+			    \multirow{3}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{bright} & 322 & 2 & 12\\
+			    & \textbf{neutral} & 15 & 243 & 23 \\
+			    & \textbf{dark} & 7 & 5 & 191
+		\end{tabular} \\
+		a) Organelle Type
+		\end{center}
+	\end{minipage}
+	\hspace*{0.2cm}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+		\begin{tabular}{c c| c c c}
+				 & & \multicolumn{3}{c}{True} \\
+			     & & \textbf{rough} & \textbf{smooth} & \textbf{blob} \\
+			    \hline
+			    \multirow{3}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{rough} & 176 & 13 & 4\\
+			    & \textbf{smooth} & 42 & 547 & 12 \\
+			    & \textbf{blob} & 0 & 0 & 26
+		\end{tabular} \\
+		b) Texture
+		\end{center}
+	\end{minipage}
+	\vspace{5pt}
+	
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+		\begin{tabular}{c c| c c c}
+				 & & \multicolumn{3}{c}{True} \\
+			     & & \textbf{lots} & \textbf{few} & \textbf{none} \\
+			    \hline
+			    \multirow{3}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{lots} & 178 & 6 & 9\\
+			    & \textbf{few} & 19 & 226 & 13 \\
+			    & \textbf{none} & 20 & 22 & 327
+		\end{tabular} \\
+		c) number of objects
+		\end{center}
+	\end{minipage}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+		\begin{tabular}{c c| c c c}
+				 & & \multicolumn{2}{c}{True} \\
+			     & & \textbf{spec} & \textbf{hom} \\
+			    \hline
+			    \multirow{2}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{spec} & \parbox[b]{0.5cm}{539} & 33 \\
+			    & \textbf{hom} & 46 & 202  \\
+		\end{tabular} \\
+		d) speckles
+		\end{center}
+	\end{minipage}
+\end{figure}

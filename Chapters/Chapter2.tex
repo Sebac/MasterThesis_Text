@@ -85,3 +85,22 @@ the nucleoli of interphase cells which tend towards homogeneity, with less than 
 %------------------------------------------%
 
 \section{Machine learning}
+
+The main tool for solving such tasks is \textit{machine learning}. The goal of machine learning is to build \textit{intelligent} systems that improve their performance  with experience. Machine learning systems typically learn concepts from examples or learn skills,  by observation or by interacting with the environment. For example, a machine learning system can predict which web page you want to visit, filter your spam emails, or assist doctors with diagnosing patients based on their medical records. \\
+
+
+Machine learning algorithms work by learning \textit{models} of the world. These models represent a function of  the concept being learned, which depends of the system's inputs. A model can be learned for one of two purposes.  First, the model can be learned to predict its environment and take actions according to its prediction. Second, the model can assist humans in understanding the environment, where model can be interpreted and understood by humans. \\
+
+Models can be learned in different settings. First, in \textit{supervised} learning settings, models can access both input and output of a system they try to imitate. In \textit{unsupervised} settings, only inputs are known so task is to identify regularities in input data. \textit{Reinforcement} learning, on the other hand, represents the most different setting, where model is inferred continuously taking actions  and receiving \textit{prize} for good actions and \textit{punishment} for bad actions. \\
+
+Based on a way how these models are inferred, they can be divided in two categories. \textit{Probabilistic} models are built so they maximize the \textit{likelihood} of examples observed. Likelihood of data could be interpreted as a measure of how well the parameters of a model describe the observed data. More formally, if $\mathbf{x}_i$ is one instance from data set $\mathcal{D}$, the likelihood $\mathcal{L}$ of model with parameters $\boldsymbol \theta$ can be calculated as 
+
+\begin{equation}
+	\mathcal{L}(\mathcal{D} | \boldsymbol \theta) = \prod_{i=1}^{N}p(\mathbf{x}_i | \boldsymbol \theta). 
+\end{equation}
+
+In the second category are \textit{discriminative} models. These models treat each data example as a point in $n$-dimensional space, where $n$ is a number of \textit{features}, an information units, describing the concept. These models learn concepts by finding a \textit{hyperplane} that separates the concepts in feature space. The hyperplane is chosen to minimize a \textit{misclassification} error defined as
+
+\begin{equation}
+	\text{error rate} = \frac{\text{\#correctly classified examples}}{\text{\#examples} }.
+\end{equation}

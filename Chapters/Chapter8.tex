@@ -1,0 +1,23 @@
+\chapter{Conclusion}
+
+\label{Conclusion}
+
+This thesis proposes a solution for a computer aided assistance in one commonly used diagnostics in autoimmune diseases. The solution closely follows the procedure medical experts suggests. It covers the segmentation task,  the fluorescence intensity level classification and staining pattern classification. The strongest contribution of this thesis is the interpretable approach to prediction models that help medical experts. \\
+
+The work on segmentation part was motivated by two problems found in previous approaches. Due to a coloring procedure of fluorescence imaging, cells exhibit different properties which makes them hard to detect, especially in noisy images. By finding background instead of cells directly that problem was successfully solved with great improvement. Still, a lot of cells overlaps.  By using the information about background, morphological snakes were introduced. Although not always capable of separating overlapping cells, the method demonstrated very promising result. The problematic case were the patterns with bright organelles where those organelles were segmented. \\
+
+The cells were then characterized with \textit{visual concepts} describing their appearance. Deep belief networks were used to map image, or pixel features to a \textit{symbolic} ones. Deep approaches to machine learning demonstrated a great potential in symbolic feature recognition. Surprisingly, convolutional components seem not to improve the recognition, but a full potential of this approach is yet to be investigated. \\
+
+The symbolic representation learned in the previous step are then used to mine rules that describe the patterns. Four commonly used rule mining algorithms were compared and proven to perform accurately as state-of-the-art methods, but offer explanations about their decisions. I believe such approach is needed when computers assist in making diagnosis, based on images or other diagnostic test.
+
+\begin{flushleft}
+	\large
+	\vspace{15pt}
+	\textbf{Future work}
+\end{flushleft}
+
+In order to make a fully functional system that supports this process, there are still problems that need to be solved. The segmentation task still suffers from certain problem, such as \textit{overexposed} organelles in a cell's body which end oversegmented. Introducing a model based segmentation method, where movement of the contour is restrained by model learned from data, might be a way to improve the segmentation of cells. \\
+
+There are two actions that have not be mentioned in this thesis, but are of high interest to his task. Mitotic cells were taken as a ground truth so far, but detecting and classifying them is very important task for the diagnostic procedure. Together with mitotic cells, images taken by fluorescence imaging often have artifacts that don't care any information. Both mitotic cells and artifacts are very rare objects in images which is the main difficulty of this task. Approaching this problem from an unbalanced dataset or outlier detection perspective could be a good start. \\
+
+Symbolic feature learning achieved by deep belief network has proven a great potential. As deep learning demonstrates an enormous growth in research, experimenting with different deep approaches to improve symbolic representation learning leaves a lot of space for future work.

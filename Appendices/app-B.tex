@@ -1,0 +1,162 @@
+% Chapter Template
+
+\chapter{Induces rules} % Main chapter title
+
+\label{AppendixB} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+
+In this appendix, the distributions of symbolic features are analyzed. The histogram of values for each symbolic features is plotted with regard to class.
+
+
+%----------------------------------------------------------------------------------------
+%	FEATURES
+%----------------------------------------------------------------------------------------
+
+\begin{figure}
+	\caption{Rules induced by RIPPER }
+	\label{fig:RulesRIPPER}
+	\small
+	\centering
+	
+		\begin{algorithmic}[1]
+			\State \texttt{IF} number\_of\_obj = \textit{lots} 
+			\Statex \texttt{THEN} \textit{centromere}
+			\State \texttt{IF} mitotic\_cells = \textit{bright\_middle} 
+			\Statex \texttt{THEN} \textit{homogeneos}
+			\State \texttt{IF} organelle\_type = \textit{bright\_on\_dark} 
+			\Statex \texttt{THEN} \textit{nucleolar}
+			\State \texttt{IF} texture = \textit{rough} 
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			\State \texttt{IF} shape = \textit{circular}  \texttt{AND} number\_of\_obj = \textit{few}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			\State \texttt{IF} shape = \textit{irregular} 
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} organelle\_type = \textit{neutral} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} mitotic\_cells = \textit{neutral} 
+			\Statex \texttt{THEN} \textit{nucleolar}
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} speckled = \textit{homogeneous} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			\State \textbf{else} \textit{cytoplasmatic}
+		\end{algorithmic}
+	
+\end{figure}
+
+
+\begin{figure}
+	\caption{Rules induced by Decision tree }
+	\label{fig:RulesDT}
+	\footnotesize
+	\centering
+	
+		\begin{algorithmic}[1]
+			\State \texttt{IF} mitotic\_cells = \textit{bright middle} \texttt{AND} number\_of\_obj = \textit{few}
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{bright middle} \texttt{AND} number\_of\_obj = \textit{lots}
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{bright middle} \texttt{AND} number\_of\_obj = \textit{none}
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{bright middle sparkle}
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{blob}
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{bright\_on\_dark}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} speckles = \textit{homogeneous}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} speckles = \textit{speckled}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{neutral} 
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{bright\_on\_dark} \texttt{AND} intensity = \textit{intermediate} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{bright\_on\_dark} \texttt{AND} intensity = \textit{positive} 
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} number\_of\_obj = \textit{few} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} number\_of\_obj = \textit{lots} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} number\_of\_obj = \textit{none} 
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{dark spot} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{neutral} 
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{bright\_on\_dark}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} texture = \textit{rough} \texttt{AND} intensity = \textit{intermediate}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} texture = \textit{rough} \texttt{AND} intensity = \textit{positive}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{dark\_on\_bright} \texttt{AND} texture = \textit{smooth}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} number\_of\_obj = \textit{few}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} number\_of\_obj = \textit{lots}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} number\_of\_obj = \textit{none} \texttt{AND} intensity = \textit{intermediate}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{neutral} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} number\_of\_obj = \textit{none} \texttt{AND} intensity = \textit{positive}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{unknown} \texttt{AND} number\_of\_obj = \textit{few} 
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} mitotic\_cells = \textit{unknown} \texttt{AND} number\_of\_obj = \textit{none} 
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+		\end{algorithmic}
+\end{figure}
+
+
+\begin{figure}
+	\caption{Rules induced by FOIL }
+	\label{fig:RulesFOIL}
+	\small
+	\centering
+	
+		\begin{algorithmic}[1]
+			\State \texttt{IF} organelle\_type = \textit{bright on dark} \texttt{AND} number\_of\_obj = \textit{lots} 
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} number\_of\_obj = \textit{lots} \texttt{AND} mitotic\_cells = \textit{bright middle}
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} speckles = \textit{speckled} \texttt{AND} texture = \textit{rough}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} mitotc\_cells = \textit{dark spot}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{dark on bright} \texttt{AND} number\_of\_obj = \textit{few} \texttt{AND} mitotic\_cells = \textit{dark spot}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} shape = \textit{irregular}
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} texture = \textit{blob}
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+		\end{algorithmic}
+	
+\end{figure}

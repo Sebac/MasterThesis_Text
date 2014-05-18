@@ -9,12 +9,12 @@
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-The fluorescence intensity is an parameter that describes the \textit{clarity} of cells in image. It is a subjective parameter which, unfortunately, doesn't have a strong theoretical explanation. The fluorescence intensity is described with three values - positive, intermediate and negative. Positive value defines images in which cells are perfectly separated from background, while negative value defines images in which cells in which cells cannot be identified. The intermediate value covers images that are not positive nor negative. \\
+The fluorescence intensity is a parameter that describes the \textit{clarity} of cells in image. It is a subjective parameter which, unfortunately, doesn't have a strong theoretical explanation. The fluorescence intensity is described with three values - positive, intermediate and negative. Positive value defines images in which cells are perfectly separated from background, while negative value defines images in which cells in which cells cannot be identified. The intermediate value covers images that are not positive nor negative. This parameter is used as a symbolic feature later in the process, but for the sake of \textit{standard procedure} it is estimated separately. \\
 
 
 In \cite{Rigon2007} Rigon studied the variability of decision made by doctors and showed that it is hard to achieve a consensus about unique determination of the fluorescence intensity value. The lack of underlying model is making this problem hard to formulate. The intuition behind the suggested approach is an assumption that intensity level could be observed in the histogram of an image. The fluorescence intensity should correspond to the difference to a region describing the background and a region describing cells. Following the intuition, an image histogram is approximated with the Gaussian mixture model. \\
 
-The idea is to approximate the histogram with a mixture of 2 Gaussian functions - one representing the background and second one to model the cells. The intuition is that images with positive intensity should have Gaussians with higher means and more further apart. 
+The idea is to approximate the histogram with a mixture of two Gaussian functions - one representing the background and second one to model the cells. The intuition is that images with positive intensity should have Gaussians with higher means and more further apart. 
 
 
 %-----------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ i.e., we want the margin to be at least $\rho$. As there are infinitely many sol
 
 Now there will be instances that are $\frac{1}{\Vert \mathbf{w} \Vert}$ away from the hyperplane and the total margin equals to $\frac{2}{\Vert \mathbf{w} \Vert}$. \\
 
-If the problem is not linearly separable, one trick is to map the problem to a new space, with more dimension that the original space, by using nonlinear basis functions. It is generally the case that higher dimensional representation is easier to separate. One such mapping function is the \textit{radial basis function or gps or google maps}. 
+If the problem is not linearly separable, one trick is to map the problem to a new space, with more dimension that the original space, by using nonlinear basis functions. It is generally the case that higher dimensional representation is easier to separate. One such mapping function is the \textit{radial basis function}. 
 
 
 %---------------------------------------%
@@ -87,7 +87,7 @@ If the problem is not linearly separable, one trick is to map the problem to a n
  
 \subsection{Radial basis functions}
 
-Radial basis functions are an instance of a \textit{local representation}, where fora given input, only a few factors are \textit{active}. It is in a way a partition of a space so that \textit{locally tuned} partitions are selective to only certain inputs. \\
+Radial basis functions are an instance of a \textit{local representation}, where for a given input, only a few factors are \textit{active}. It is in a way a partition of a space so that \textit{locally tuned} partitions are selective to only certain inputs. \\
 
 With the concept of local partitioning we need to define a measure of similarity between an input $\mathbf{x}^{(i)}$ and the local clusters $\boldsymbol \mu^1, \ldots, \boldsymbol \mu^n$. The radial basis functions are defined as
 
@@ -108,4 +108,60 @@ that is, it uses the Euclidean distance as a measure of similarity and Gaussian 
 
 \subsection{Results}
 
-One issue that might occur is a bad estimation of the background or cell body as some cells takes a very small portion of an image or, on the other size, takes almost a whole image when segmented as shown in image X. To see how this influences the problem, histograms are approximated with Gaussian functions in two ways. First, the histogram is as in Chapter \ref{Chapter4}, without any restrictions. Second, the background and cells part of an image are separated and each part is approximated with a Gaussian individually. 
+One issue that might occur is a bad estimation of the background or cell body as some cells takes a very small portion of an image or, on the other size, takes almost a whole image when segmented as shown in image \ref{fig:Bad}. To see how this influences the problem, histograms are approximated with Gaussian functions in two ways. First, the histogram is as in Chapter \ref{Chapter4}, without any restrictions. Second, the background and cells part of an image are separated and each part is approximated with a Gaussian individually. \\
+
+\begin{figure}
+	\begin{minipage}[h]{0.32\linewidth}
+		\begin{flushright}
+			\includegraphics[height=2cm]{Figures/intensity/image1}
+		\end{flushright}
+	\end{minipage}
+	\begin{minipage}[h]{0.32\linewidth}
+		\centering
+		\includegraphics[height=2cm]{Figures/intensity/image2}
+	\end{minipage}
+	\begin{minipage}[h]{0.32\linewidth}
+		\begin{flushleft}
+			\includegraphics[height=2cm]{Figures/intensity/image3}
+		\end{flushleft}
+	\end{minipage}
+	\caption{Potential image that could obtain bad estimation}
+	\label{fig:Bad}
+\end{figure}
+
+Table \ref{res:SepReg} summarizes the results obtained with separation of background and cell regions (a) and without (b). The accuracy of proposed solution is 96.21 \% and 96.08 \% for separation and without it, respectively. As the results for both cases don't show any significant difference, the stability of method is promising.  The best performance reported so far is 92,6 \% although the authors have used a private data set that is not available online, so it is hard to make a comparison.  So far, the results of this data set are not yet reported. \\
+
+The evaluation is performed on cell level - the intensity level is estimated on cell level. In practice, the intensity level is assigned on image level. Each cell in the image is then assigned with a level of the image. Averaging the classification over an image, a 100 \% accuracy is achieved.
+
+
+
+
+\begin{figure}
+	\caption{Results of intensity classification}
+	\label{res:SepReg}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+			\begin{tabular}{c c| c c}
+				 & & \multicolumn{2}{c}{True} \\
+			     & & \textbf{pos} & \textbf{int} \\
+			    \hline
+			    \multirow{2}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{pos} & 804 & 31 \\
+			    & \textbf{int} & 25 & 595
+			\end{tabular} \\
+		a)
+		\end{center}
+	\end{minipage}
+	\begin{minipage}[h]{0.49\linewidth}
+		\begin{center}
+			\begin{tabular}{c c| c c}
+				 & & \multicolumn{2}{c}{True} \\
+			     & & \textbf{pos} & \textbf{int} \\
+			    \hline
+			    \multirow{2}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{pos} & 800 & 36 \\
+			    & \textbf{int} & 29 & 590
+			\end{tabular} \\
+			b)
+		\end{center}
+	\end{minipage}
+\end{figure}
+

@@ -32,6 +32,17 @@
 \usepackage{amsmath}
 \usepackage{tabulary}
 \usepackage{ wasysym }
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{multirow}
+
+\newcommand\MyBox[1]{
+  \fbox{\lower0.75cm
+    \vbox to 1.7cm{\vfil
+      \hbox to 1.7cm{\hfil\parbox{1.0cm}{ #1}\hfil}
+      \vfil}%
+  }%
+}
 
 % Finally the hyperref package is used for pdf files.
 % This can be commented out for printed versions.
@@ -49,10 +60,11 @@
 \begin{document}
 
 \begin{preface}
-  I would like to thank everybody who kept me busy the last year,
-  especially my promotor and my assistants. I would also like to thank the
-  jury for reading the text. My sincere gratitude also goes to my wive and
-  the rest of my family.
+  %I would like to thank everybody who kept me busy the last year,
+  %especially my promotor and my assistants. I would also like to thank the
+  %jury for reading the text. My sincere gratitude also goes to my wive and
+  %the rest of my family.
+  \lipsum[1]
 \end{preface}
 
 \tableofcontents*
@@ -104,6 +116,7 @@
 \include{Chapters/Chapter5}
 \include{Chapters/Chapter6}
 \include{Chapters/Chapter7}
+\include{Chapters/Chapter8}
 % ... and so on until
 %\include{chap-n}
 %\include{conclusion}
@@ -111,7 +124,8 @@
 % If you have appendices:
 \appendixpage*          % if wanted
 \appendix
-\include{Appendices/app-A}
+%\include{Appendices/app-A}
+\include{Appendices/app-B}
 % ... and so on until
 %\include{app-n}
 
