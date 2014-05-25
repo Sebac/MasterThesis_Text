@@ -7,7 +7,7 @@
 
 \texttt{IF-THEN} rules are the most natural way of expressing knowledge. They are easy to understand and quite expressive. Because of their nature to represent knowledge, mining knowledge in such form is of interest to this project. \\
 
-The symbolic representation of cells obtained in the previous step is here used as an input features. Two popular approached for mining such rules in supervised way are \textit{Decision trees} and \textit{Inductive Logic Programming}.
+The symbolic representation of cells obtained in the previous step is here used as an input features. Two popular approaches for mining such rules in a supervised way are \textit{Decision trees} and \textit{Inductive Logic Programming}.
 
 
 
@@ -17,9 +17,9 @@ The symbolic representation of cells obtained in the previous step is here used 
 
 \section{Decision Trees}
 
-Decision trees are one popular instance of machine learning algorithms due to their \textit{simplicity} and \textit{interpretability}. It approximates discrete functions and it is very robust to a noisy data which makes it suitable for this application. It used the standard \textit{tree} structure to represent and compress the data where each \textit{node} represent a test on attribute and each \textit{branch} stands for values of the tested attribute. \\
+Decision trees are one popular instance of machine learning algorithms due to their \textit{simplicity} and \textit{interpretability}. The decision tree approximates discrete functions and it is very robust to noisy data which makes it suitable for this application. It uses the \textit{tree} structure to represent and compress the data where each \textit{node} represents a test on attribute and each \textit{branch} stands for values of the tested attribute. \\
 
-Decision tree performs \textit{greedy search} of a search space and choose an attribute to split data on. The chosen attribute then becomes the node in the tree and values it can take become branches. As a measure of \textit{quality} of an attribute, \textit{information gain} is used. \\
+The decision tree performs a \textit{greedy search} in a search space and chooses an attribute to split data on. The chosen attribute then becomes the node in the tree, and values it can take become branches. As a measure of \textit{quality} of an attribute, \textit{information gain} is used. \\
 
 Information gain compares the \textit{entropy} of the dataset before and after splitting. For a $K$ class case, entropy of data set $\mathcal{D}$ is defined as
 
@@ -27,13 +27,13 @@ Information gain compares the \textit{entropy} of the dataset before and after s
 	\mathtt{Entropy}(\mathcal{D}) = \sum_{k=1}^K p(\mathcal{C}_k)\mathtt{log}_2 p(\mathcal{C}_k)
 \end{equation}
 
-where $p(\mathcal{C_k})$ stands for a fraction of examples in data set $\mathcal{D}$ that belong to a class $\mathcal{C}_k$. Informally, it measures the \textit{impurity} of data. Having entropy defined, information gain achieved by splitting on attribute $A$ is defined as
+where $p(\mathcal{C_k})$ stands for a fraction of examples in data set $\mathcal{D}$ that belong to class $\mathcal{C}_k$. Informally, it measures the \textit{impurity} of data. Having entropy defined, information gain achieved by splitting on attribute $A$ is defined as
 
 \begin{equation}
 	\mathtt{InformationGain}(\mathcal{D}, A) = \mathtt{Entropy}(\mathcal{D}) - \sum_{v \in values(A)} \frac{\vert \mathcal{D}_v \vert}{\vert \mathcal{D} \vert}\mathtt{Entropy}(\mathcal{D}_v)
 \end{equation} 
 
-where $\mathcal{D}_v = \{ x \in \mathcal{D} | A(x) = v \}$ represents a subset of the original data set $\mathcal{D}$ with attribute $A$ equal to $v$. Informally, as entropy measures the \textit{impurity} of data, information gain measures how much of \textit{impurity} has been lost by splitting the data. The partitioning is until there are not attributes to split on or data contains only examples for the same class. Decision trees are summarized in Algorithm \ref{alg:DT}.
+where $\mathcal{D}_v = \{ x \in \mathcal{D} | A(x) = v \}$ represents a subset of the original data set $\mathcal{D}$ with attribute $A$ equal to $v$. Informally, as entropy measures the \textit{impurity} of data, information gain measures how much of the \textit{impurity} has been lost by splitting the data. The partitioning continues until there are not attributes to split on, or the data contains only examples for the same class. Decision trees are summarized in Algorithm \ref{alg:DT}.
 
 
 \begin{algorithm}
@@ -73,9 +73,9 @@ where $\mathcal{D}_v = \{ x \in \mathcal{D} | A(x) = v \}$ represents a subset o
 
 \section{Inductive logic programming}
 
-Inductive logic programming (ILP) is an intersection between Machine learning and Logic programming where logic representation is used to induce the knowledge. Inductive logic programming is concerned with finding a hypothesis $\mathcal{H}$ from a set of positive and negative examples $\mathcal{P}$ and $\mathcal{N}$. It is required that the hypothesis $\mathcal{H}$ covers all positive examples in $\mathcal{P}$ and none of the negative examples in $\mathcal{N}$. \\
+Inductive logic programming (ILP) is an intersection between Machine learning and Logic programming where logic representation is used to induce knowledge. Inductive logic programming is concerned with finding a hypothesis $\mathcal{H}$ from a set of positive and negative examples $\mathcal{P}$ and $\mathcal{N}$. It is required that the hypothesis $\mathcal{H}$ covers all positive examples in $\mathcal{P}$ and none of the negative examples in $\mathcal{N}$. \\
 
-ILP programs incorporate \textit{background knowledge} to induce rules from positive examples. It is convenient to view the background knowledge $\mathcal{B}$ as a logic program that is provided to the ILP system and fixed during the learning process. Under the presence of background knowledge, the hypothesis $\mathcal{H}$ together with the background theory $\mathcal{B}$ should cover all positive and none of the negative examples. \\
+ILP programs incorporate \textit{background knowledge} to induce rules from positive examples. It is convenient to view the background knowledge $\mathcal{B}$ as a logic program that is provided to the ILP system and fixed during the learning process. Under the presence of background knowledge, the hypothesis $\mathcal{H}$, together with the background theory $\mathcal{B}$, should cover all positive and none of the negative examples. \\
 
 Many ILP systems have been developed over the years and three representative systems are described here.
 
@@ -83,12 +83,12 @@ Many ILP systems have been developed over the years and three representative sys
 
 FOIL algorithm is an instance of \textit{Sequential covering} algorithms. Sequential covering employs the \textit{divide-and-conquer} principle and tries to learn one rule at time. Every induce rule should cover as many positive examples as possible, and as less negative examples as possible. \\
 
-FOIL is summarized in Algorithm \ref{alg:FOIL}. FOIL performs general-to-specific search where each candidate clause to a current rule is in one of the following forms:
+FOIL is summarized in Algorithm \ref{alg:FOIL}. FOIL performs a general-to-specific search where each candidate clause to a current rule is in one of the following forms:
 
 \begin{itemize}
 	\item $\mathcal{Q}(v_1,\ldots, v_n)$ where $\mathcal{Q}$ is a predicate from the set of all predicates and $v_i$ are either variables already present in the rule or new variables
 	\item $\mathtt{Equal}(x_i, x_j)$ where $x_i \text{ and } x_j$ are variables already present in the rule
-	\item the negation of either of above mentioned forms.
+	\item the negation of either of the above mentioned forms.
 \end{itemize}
 
 Another important step in FOIL is the evaluation of candidate clauses. Let $R'$ be the rule created by adding candidate clause $L$ to rule $R$. Performance measure $\mathtt{FoilGain}(L,R)$ is defined as
@@ -138,17 +138,17 @@ where $p_0$ stands for the number of positive bindings of rule $R$, $n_0$ is the
 
 The RIPPER algorithm is another instance of the sequential covering algorithms. Compared to FOIL, it introduces two additional steps - rule pruning and rule optimization. The algorithm is summarized in Algorithm \ref{alg:RIPPER}. \\
 
-For multi-class problems, it orders the classes according to increasing class prevalence - fraction of instances that belong to a particular class. It learns the rule set for the smallest class first and treats other classes as negative. It then repeats the process taking next smallest class as positive class. RIPPER also uses $\mathtt{FoilGain}$ measure as the performance measure.\\
+For multi-class problems, it orders the classes according to increasing class prevalence --  a fraction of instances that belong to a particular class. It learns the rule set for the smallest class first and treats other classes as negative. It then repeats the process taking the next smallest class as a positive class. RIPPER also uses $\mathtt{FoilGain}$ measure as the performance measure.\\
 
-The pruning step is done by using \textit{Incremental Reduced Error Pruning}. Data set is split into training and validation set. The rule is then grown at the training set. The validation set is used to prune the rules. For each rule, performance measure $v$ is calculated with a precondition removed. The performance measure $v$ is defined as 
+The pruning step is done by using \textit{Incremental Reduced Error Pruning}. The data set is split into the training and validation set. The rule is then induced from the training set. The validation set is used to prune the rules. For each rule, performance measure $v$ is calculated with a precondition removed. The performance measure $v$ is defined as 
 
 \begin{equation}
 	v(pruneRule, Pos, Neg) = \frac{p - n}{p + n},
 \end{equation}
 
-where $p$ is the number of positive examples in the validation set covered by pruned rule and $n$ is the number of negative examples in the validation set covered by pruned rule. \\
+where $p$ is the number of positive examples in the validation set covered by the pruned rule and $n$ is the number of negative examples in the validation set covered by the pruned rule. \\
 
-In the optimization step, for each rule two new rules are generated. One is completely build from scratch while second one is generated by adding new conjunctions to the existing rule. As RIPPER performs the greed search, the rule built from scratch might not be the same as the starting one. In that way, three separate rule sets are generated and compared. Resulting rule set is chosen to minimize the \textit{Minimum Description Length} (MDL). MDL uses the assumption that any \textit{regularity} in data can be used to \textit{compress} the data. Given the hypothesis $\mathcal{H}^{(0)}, \mathcal{H}^{(1)}, \ldots, \mathcal{H}^{(n)}$, which in this case are the rule sets, the best hypothesis is the one which minimizes the distance 
+In the optimization step, for each rule two new rules are generated. One is completely built from scratch while the second one is generated by adding new conjunctions to the existing rule. As RIPPER performs the greed search, the rule built from scratch might not be the same as the starting one. In that way, three separate rule sets are generated and compared. The resulting rule set is chosen to minimize the \textit{Minimum Description Length} (MDL). MDL uses the assumption that any \textit{regularity} in the data can be used to \textit{compress} the data. Given the hypothesis' set $\mathcal{H}^{(0)}, \mathcal{H}^{(1)}, \ldots, \mathcal{H}^{(n)}$, which in this case are the rule sets, the best hypothesis is the one which minimizes the distance 
 
 \begin{equation}
 	L(\mathcal{H}) + L(\mathcal{D} | \mathcal{H}),
@@ -217,13 +217,13 @@ where $L(\mathcal{H})$ is the length, in bits, of the description of the hypothe
 
 \subsection{Aleph}
 
-Aleph (\textbf{A} \textbf{L}earning \textbf{E}ngine for \textbf{P}roposing \textbf{H}ypotheses) is another commonly used rule induction system. The outline of the approach is summarized in Algorithm \ref{alg:Aleph}.  \\
+\texttt{Aleph} (\textbf{A} \textbf{L}earning \textbf{E}ngine for \textbf{P}roposing \textbf{H}ypotheses) is another commonly used rule induction system. The outline of the approach is summarized in Algorithm \ref{alg:Aleph}.  \\
 
-It starts with selection of a example to generalize. When the examples is selected, the most specific clause is built. Constructed clause have to entail the selected example and it is usually a \textit{bottom clause} - a definite clause with many literals. \\
+It starts with a selection of an example to generalize. When the examples is selected, the most specific clause is built. The constructed clause has to entail the selected example and it is usually a \textit{bottom clause} -- a definite clause with many literals. \\
 
-Aleph then performs search to generalize the bottom clause. Generalization is done by searching for a subset of the literals in the bottom clause that score the best. The search is performed by a \textit{branch-and-bound} search. At this moment Aleph tries to find the best generalization of the current bottom clause, although it does not produce all generalizations. When the best clause is found, it is added to current theory and all example covered by the clause are removed. \\
+\texttt{Aleph} then performs a search to generalize the bottom clause. Generalization is done by searching for a subset of the literals in the bottom clause that score the best. The search is performed by a \textit{branch-and-bound} search. At this moment \texttt{Aleph} tries to find the best generalization of the current bottom clause, although it does not produce all generalizations. When the best clause is found, it is added to the current theory and all examples covered by the clause are removed. \\
 
-The generalization of clause is summarized in function \texttt{GENERALIZE} in Algorithm \ref{alg:Aleph}. It starts by selecting a clause from \textit{active set}. Clauses are selected in a way that clauses with fewer literals are chosen first. The selected clause is then \textit{branched} by adding one literal at time. For each child, cost and lower bound are calculated. Lower bounds represent the lower cost that can be obtained at the node (that represent clause) and the sub-tree below it. 
+The generalization of a clause is summarized in the function \texttt{GENERALIZE} in Algorithm \ref{alg:Aleph}. It starts by selecting a clause from the \textit{active set}. Clauses are selected in a way that clauses with fewer literals are chosen first. The selected clause is then \textit{branched} by adding one literal at time. For each child, the cost and lower bound are calculated. Lower bounds represent the lower cost that can be obtained at the node (that represent the clause) and the sub-tree below it. 
 
 \begin{algorithm}
 	\caption{Aleph}
@@ -269,13 +269,13 @@ The generalization of clause is summarized in function \texttt{GENERALIZE} in Al
 
 \section{Results and induced rules}
 
-Above described methods are used to extract rules that describe the patterns. Classifiers are evaluated with a 10-fold cross validation. Tables \ref{tab:Precision} and \ref{tab:Recall} summarize the precision and recall of each classifier. Results are represented class-wise together with the number of rules found. \\
+The above described methods are used to extract rules that describe the patterns. Classifiers are evaluated with the 10-fold cross validation. Tables \ref{tab:Precision} and \ref{tab:Recall} summarize the precision and recall of each classifier. Results are represented class-wise together with the number of rules found. \\
 
-When analyzing the performance of classifier, both accuracy and the number of induced rules should be considered. The results suggest that Decision trees and RIPPER perform the best. Overall accuracy of decision tree and RIPPER are 95.26 \% and 94.50 \% respectively. Decision tree achieves the highest accuracy, but produces significantly many more rules - 25 compared to 10 induced by RIPPER. Such a difference suggests overfitting. Induced rules are shown in Appendix \ref{AppendixB}. It can be observed that RIPPER not only produces less rules, but those rules are also much simpler than ones induced by decision tree. Rules induced by RIPPER usually have one or two clauses in the body, while rules induced by decision tree usually have three or four clauses in the body. Also, it can be seen that 9 out of 25 rules induced covers less than 10 examples in the dataset. The state-of-the-art performance reported so far is 94.9 \% \cite{Wiliem}. The obtained results are quite comparable to that paper, but also provide explainable results.\\
+When analyzing the performance of the classifier, both accuracy and the number of induced rules should be considered. The results suggest that Decision trees and RIPPER perform the best. The overall accuracy of the decision tree and RIPPER are 95.26 \% and 94.50 \% respectively. The decision tree achieves the highest accuracy, but produces significantly  more rules - 25 compared to 10 induced by RIPPER. Such a difference suggests  overfitting. Induced rules are shown in Appendix \ref{AppendixB}. It can be observed that RIPPER not only produces less rules, but those rules are also much simpler than ones induced by the decision tree. Rules induced by RIPPER usually have one or two clauses in the body, while rules induced by the decision tree usually have three or four clauses in the body. Also, it can be seen that 9 out of 25 rules induced cover less than 10 examples in the dataset. The state-of-the-art performance reported so far is 95.19 \% \cite{Wiliem}. The obtained results are quite comparable to that paper, but also provide explainable results.\\
 
-Taking both performance and simplicity into account, the rules induced by RIPPER seams to perform the best. Their simplicity makes them more applicable to the real life scenarios. They also correspond more to the intuition about the patterns. The induced rules mostly extract the most distinguishing property of a certain pattern. For example, \textit{centromere} class is identified by a large number of objects in the cell body, \textit{cytoplasmatic} by the irregular shape and \textit{coarse speckled} by rough texture. All of these properties are characteristic for specific patterns and don't appear for other types. The drawback of this approach is that the rules should be always applied \textit{sequentially}. \\
+Taking both performance and simplicity into account, the rules induced by RIPPER seem to perform the best. Their simplicity makes them more applicable to real life scenarios. They also correspond more to the intuition about the patterns. The induced rules mostly extract the most distinguishing property of a certain pattern. For example, \textit{centromere} class is identified by a large number of objects in the cell body, \textit{cytoplasmatic} by the irregular shape and \textit{coarse speckled} by rough texture. All of these properties are characteristic for specific patterns and don't appear for other types. The drawback of this approach is that rules should be always applied \textit{sequentially}. \\
 
-As suggested in literature, the most difficult classes to classify are \textit{fine speckled} and \textit{homogeneous}. It is very hard to distinguish between those two classes because they look very similar, especially in low intensity images. The literature indicated that mitotic cells are highly informative for for this task. It appears that  \texttt{RIPPER} and \texttt{Decision trees} are able to capture that relations, while \texttt{ALEPH} and \texttt{FOIL} are not.
+As suggested in the literature, the most difficult classes to classify are \textit{fine speckled} and \textit{homogeneous}. It is very hard to distinguish between those two classes because they look very similar, especially in low intensity images. The literature indicated that mitotic cells are highly informative for this task. It appears that  \texttt{RIPPER} and \texttt{decision trees} are able to capture those relations, while \texttt{ALEPH} and \texttt{FOIL} are not.
 
 \begin{table}
 	\caption{Precision of pattern classification}
@@ -289,6 +289,8 @@ As suggested in literature, the most difficult classes to classify are \textit{f
 		RIPPER & 93.48 \% & 94.65 \% & 98.24 \% & 96.33 \% & 83.33 \% & 92.78 \% & 10 \\
 		\hline	
 		DTREE & 93.48 \% & 97.10 \% & 100 \% & 96.46 \% & 87.00 \% & 96.86 \% & 25 \\	
+		\hline
+		FOIL & 92.15 \% & 98.59 \% & 98.79 \% & 98.98 \% & 92.84 \% & 92.86 \% & 17 \\ 
 	\end{tabular}
 \end{table}
 
@@ -301,9 +303,11 @@ As suggested in literature, the most difficult classes to classify are \textit{f
 		\textbf{method} & homogeneous & nuleolar & centromere & cytoplasmatic & fine speckled & coarse speckled & rules \\
 		\hline
 		\hline
-		RIPPER & 93.48 \% & 94.65 \% & 98.24 \% & 96.33 \% & 83.33 \% & 92.78 \% & 10 \\
+		RIPPER & 100 \% & 95.44 \% & 93.56 \% & 96.33 \% & 86.54 \% & 85.71 \% & 10 \\
 		\hline	
-		DTREE & 93.48 \% & 97.10 \% & 100 \% & 96.46 \% & 87.00 \% & 96.86 \% & 25 \\	
+		DTREE & 100 \% & 97.10 \% & 93.56 \% & 100 \% & 93.27 \% & 88.10 \% & 25 \\	
+		\hline
+		FOIL & 100 \% & 88.78 \% & 92.37 \% & 90.9 \% & 58.57 \% & 84.27 \% & 17 \\ 
 	\end{tabular}
 \end{table}
 
