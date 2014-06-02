@@ -1,5 +1,5 @@
 \documentclass[master=mai,english,openright,fleqn]{kulemt}
-\setup{title={Classification of human epithelial cell's staining patterns},
+\setup{title={Classification of human epithelial cells' staining patterns},
   author={Sebastijan Dumancic},
   promotor={Prof.\,dr.\ Hendrik Blockeel},
   assessor={},
@@ -61,20 +61,30 @@
 \begin{document}
 
 \begin{preface}
+
+	I would like to thank my supervisors, Prof. Hendrik Blockeel and Antoine Adam, for all the advices and support that made this Thesis to happen. I would also like to thank prof. Damir Sersic and prof. Jan Snajder from University of Zagreb, Croatia for lighting the initial spark about this area in me. \\
+	
+	My stay in Leuven as an Erasmus student wouldn't be possible without the support from my family. A huge gratitude  goes to them. Finally, this Erasmus year was a wonderful experience due to great people surrounding me. I am thankful for all of those moments with them.
   %I would like to thank everybody who kept me busy the last year,
   %especially my promotor and my assistants. I would also like to thank the
   %jury for reading the text. My sincere gratitude also goes to my wive and
   %the rest of my family.
-  \lipsum[1]
+  %\lipsum[1]
 \end{preface}
 
 \tableofcontents*
 
 \begin{abstract}
-  The \texttt{abstract} environment contains a more extensive overview of
-  the work. But it should be limited to one page.
+  %The \texttt{abstract} environment contains a more extensive overview of
+  %the work. But it should be limited to one page.
 
-  \lipsum[1]
+  This thesis proposes a solution for computer aided assistance in commonly used diagnostics in autoimmune diseases. The solution closely follows the procedure medical experts suggest. It covers the segmentation task,  the fluorescence intensity level classification and staining pattern classification. The strongest contribution of this thesis is the interpretable approach to prediction models that help medical experts. \\
+
+The work on the segmentation part was motivated by two problems found in previous approaches. Due to the colouring procedure of fluorescence imaging, cells exhibit different properties which makes them hard to detect, especially in noisy images. By finding the background instead of cells directly, that problem was successfully solved with great improvement. Still, a lot of cells overlap.  By using the information about the background, morphological snakes were introduced. Although not always capable of separating overlapping cells, the method demonstrated very promising results. The problematic case were the patterns with bright organelles where those organelles were segmented. \\
+
+The cells were then characterized with \textit{visual concepts} describing their appearance. Deep belief networks were used to map images, or pixel features to \textit{symbolic} ones. Deep approaches to machine learning demonstrated the great potential in symbolic feature recognition. Surprisingly, convolutional components seem not to improve the recognition, but the full potential of this approach is yet to be investigated. \\
+
+The symbolic representations learned in the previous step are then used to mine rules that describe the patterns. Four commonly used rule mining algorithms were compared and proven to perform as accurately as state-of-the-art methods, but offer explanations about their decisions. I believe such an approach is needed when computers assist in making a diagnosis, based on images or other diagnostic tests.
 \end{abstract}
 
 % A list of figures and tables is optional
@@ -89,21 +99,24 @@
 \begin{flushleft}
   \renewcommand{\arraystretch}{1.1}
   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-    LoG   & Laplacian-of-Gaussian \\
-    MSE   & Mean Square error \\
-    PSNR  & Peak Signal-to-Noise ratio \\
+    CAD & \textbf{C}omputer \textbf{A}ided \textbf{D}iagnostics \\
+    IIF & \textbf{Indirect} \textbf{i}mmuno\textbf{f}lourescence \\
+    ILP & \textbf{I}nductive \textbf{L}ogic \textbf{P}rogramming \\
+    ANA & \textbf{A}nti-\textbf{n}uclear \textbf{a}ntiody \\
+    SVM &  \textbf{S}upport \textbf{V}ector \textbf{M}achine \\
+    ACWE & \textbf{A}ctive \textbf{C}ontours \textbf{W}ithout \textbf{E}dges \\
+    PDE & \textbf{P}artial  \textbf{d}ifferential \textbf{e}quation \\
+    RBM & \textbf{R}estricted \textbf{B}oltzmann \textbf{M}achine \\
+    FOIL & \textbf{F}irst \textbf{O}rder \textbf{I}nductive \textbf{L}earner \\
+    MDL & \textbf{M}inimum \textbf{D}escription \textbf{L}earner \\
   \end{tabularx}
 \end{flushleft}
 \section*{Symbols}
 \begin{flushleft}
   \renewcommand{\arraystretch}{1.1}
   \begin{tabularx}{\textwidth}{@{}p{12mm}X@{}}
-    42    & ``The Answer to the Ultimate Question of Life, the Universe,
-            and Everything'' according to \cite{h2g2} \\
-    $c$   & Speed of light \\
-    $E$   & Energy \\
-    $m$   & Mass \\
-    $\pi$ & The number pi \\
+    $\mu$ & a mean of a probabilistic distribution \\
+    $\Sigma$ & covariance matrix of a probabilistic distribution
   \end{tabularx}
 \end{flushleft}
 

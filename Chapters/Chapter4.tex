@@ -9,7 +9,7 @@
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-Finding the cells in images is the first and crucial step in the procedure. The problems encountered in cell segmentation are discussed in Chapter \ref{Chapter3}. All of the problems occur due to coloring procedure that is time dependent, so cells expose different properties over an image. Because of that, a part of cells remain undetected and overlapping. The challenge here is to find a method that can overcome different illumination of objects. The proposed solution deals with mentioned problems in separate steps. \\
+Finding the cells in images is the first and crucial step in the procedure. The problems encountered in cell segmentation are discussed in Chapter \ref{Chapter3}. All of the problems occur due to colouring procedure that is time dependent, so cells expose different properties over an image and some of them remain undetected. Second problem that occur is that a part of the cells overlap. The challenge here is to find a method that can overcome different illumination of objects and separate the overlapping objects. The proposed solution deals with mentioned problems in separate steps. \\
 
 
 The proposed solution is based on an observation that, although cells exhibit different properties across image due to different illumination levels, the background is uniform over a whole image and exhibits constant properties. Following the observations, the method first segments the background to find locations of the cells and then uses the second segmentation step to refine the borders of cells. \\
@@ -27,7 +27,7 @@ The proposed solution is based on an observation that, although cells exhibit di
 
 The first step of background segmentation is intended to overcome the problem of undetected cells. A desirable property of the segmentation approach for this task is the capability of capturing global properties of the background region across an image. One such algorithm is \textit{Region growing}. Region growing is a simple method that extends a region based on a similarity in intensity levels - the intensity of each candidate pixel is compared with a mean intensity of a current region. If a difference is less than a given threshold, the pixel is added to region. \\
 
-The algorithm is summarized in algorithm \ref{alg:RegGrow}. It starts with a single point, adds its neighbors to the candidate region and compares their intensity to the mean intensity of the region. If a candidate point satisfies the criteria, it is added to the region and its neighbors become candidate points. The process is repeated while there are candidate points to be tested. \\
+The algorithm is summarized in algorithm \ref{alg:RegGrow}. It starts with a single point, adds its neighbours to the candidate region and compares their intensity to the mean intensity of the region. If a candidate point satisfies the criteria, it is added to the region and its neighbours become candidate points. The process is repeated while there are candidate points to be tested. \\
 
 \begin{algorithm}
 \caption{Region Growing }
@@ -37,7 +37,7 @@ The algorithm is summarized in algorithm \ref{alg:RegGrow}. It starts with a sin
  \State $\mathtt{candidates} \gets \{ \mathtt{neighborhood}(\mathtt{starting \ point}) \}$
  \State $\mathtt{region} \gets \{ \mathtt{starting \ point} \}$
  \State $\mathtt{current point} \gets \mathtt{starting \ point}$
- \While{no new candidates}
+ \While{new candidates}
  	\For{each candidate of current point}
  		\If{candidate satisfies criteria}
  			\State add it to region
@@ -52,7 +52,7 @@ The algorithm is summarized in algorithm \ref{alg:RegGrow}. It starts with a sin
 
 The bottleneck of the method is the evaluation of candidate pixels. If target regions are big, as in this case, the method could be very slow. To overcome this bottle neck, the method is extended with a pre-filling step in which a part of an image is assigned to belong to the background by default. As it can be noticed from the images, the majority of the image is a dark background which can be observed in an image histogram as the highest peak. To speed up the segmentation, every pixel with an intensity lower or equal to the highest peak is automatically assigned to the  background.   \\
 
-The issue here is the estimation of a threshold for comparison. It is a parameter that depends on a distribution of intensities over an image. In a sense, this parameter models a variance in intensity of the background region. Motivated by variance fitting, the proposed solution is based on an assumption that an image histogram should consist of two regions - one modeling the background and a second one modeling cells, as illustrated in image \ref{img:Histogram}. The goal now is to find those two regions in the histogram. One way to accomplish that is to approximate the histogram with a mixture of Gaussian functions. This approach is taken here.  
+The issue here is the estimation of a threshold for comparison. It is a parameter that depends on a distribution of intensities over an image. In a sense, this parameter models a variance in intensity of the background region. Motivated by variance fitting, the proposed solution is based on an assumption that an image histogram should consist of two regions - one modelling the background and a second one modelling cells, as illustrated in image \ref{img:Histogram}. The goal now is to find those two regions in the histogram. One way to accomplish that is to approximate the histogram with a mixture of Gaussian functions. This approach is taken here.  
 
 \begin{figure}
 	\begin{center}
@@ -277,22 +277,24 @@ Once the histogram has been approximated with two Gaussian functions, the obtain
 \begin{figure}
 	\begin{center}
 		\includegraphics[scale=0.4]{Figures/segmentation/temp_hist_prez}
-		\label{img:Approx}
-		\caption{Approximation of an image histogram}
 	\end{center}
+	\label{img:Approx}
+	\caption{An EM approximation of an image histogram}
 \end{figure}
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[scale=0.4]{Figures/segmentation/approx_hist_thr}
-		\label{img:Thr}
-		\caption{A calculation of a threshold}
 	\end{center}
+	\label{img:Thr}
+	\caption{A calculation of a threshold}
 \end{figure}
 
-The point of using the background segmentation step is to overcome a problem of undetected cells that expose a low intensity. To evaluate this step, the optimal threshold for each image in the dataset was determined manually. The evaluation was performed in two ways - on object and pixel level. First, in the object level evaluation, the number of detected cells was compared to the ground truth, as the number of cells in each image is known in advance. Second, segmented regions were compared to the ground truth. As a measure of similarity \textit{precision} is used - the number of pixels in segmented regions that is contained in the ground truth segmentation divided by the number of pixels in the ground truth segmentation. This measure should indicate a similarity of obtained segmentation to a manually segmented cells. \\
+The point of using the background segmentation step is to overcome a problem of undetected cells that expose a low intensity. To evaluate this step, the optimal threshold for each image in the dataset was determined manually. The evaluation was performed in two ways - on object and pixel level. First, in the object level evaluation, the number of detected cells was compared to the ground truth, as the number of cells in each image is known in advance. Second, segmented regions were compared to the ground truth. As a measure of similarity \textit{precision} and \textit{recall} are used . This measure should indicate a similarity of obtained segmentation to a manually segmented cells. \\
 
 Table \ref{tab:Object} summarizes the object level results. The results show that the Region growing approach usually detects more objects than contained in the ground truth segmentation. Those extra objects detected by the proposed approach are actually partial cells that were removed from the ground truth segmentation. The presence of those partial cells demonstrates the advantages and sensitivity of region growing, but also raises a question should those cells be eliminated from further process or used as a \textit{fully observed} cells.
+
+Table \ref{tab:Pix} summarizes the pixel level results. The proposed approach is compared with the two approaches by Huang et al. mentioned in \ref{Chapter3}. Precision and recall are expressed by true positives (TP), false positive (FP) and false negative (FN). True positive are the pixels that are contained both in the ground truth and the segmentation achieved by the proposed method. False positives are the pixels that does not belong to the ground truth but are present in the achieved segmentation, while false negatives are the pixels that belong to the ground truth but are not present in the achieved segmentation. Precision is then defines as $\frac{TP}{TP + FP}$ while recall equals $\frac{TP}{TP + FN}$. Informally, precision can be seen as a confidence that the segmented region belongs to the cell, while recall can be seen as a proportion of a cell the segmentation has found. It can be seen that the previous approaches usually have high precision but low recall. With the proposed approach, those measures are much more balanced which suggests that the obtained contours represent follow the cells outline much better.
 
 \begin{table}
 	\begin{center}
@@ -334,6 +336,26 @@ Table \ref{tab:Object} summarizes the object level results. The results show tha
 	\hline
 	\end{tabular}
 	\end{center}
+\end{table}
+
+\begin{table}
+	\caption{Pixel level results for each pattern}
+	\label{tab:Pix}
+	\begin{tabular}{|c||c|c||c|c||c|c|}
+	\hline
+	 & \multicolumn{2}{c}{Proposed method} & \multicolumn{2}{c}{MULTISTAGE} & \multicolumn{2}{c}{AutoLearning} \\
+	\hline
+	 \textbf{Pattern} & Prec & Rec & Prec & Rec & Prec & Rec \\
+	 \hline
+	 \hline
+	 homogeneous & 0.836 & 0.96 & 0.955 & 0.58 & 0.983 & 0.467 \\
+	 centromere & 0.7986 & 0.84 & 0.628 & 0.395 & 0.846 & 0.356 \\
+	 nucleolar & 0.825 & 0.743 & 0.667 & 0.389 & 0.828 & 0.44 \\
+	 cytoplasmatic & 0.706 & 0.8293 & 0.166 & 0.374 & 0.553 & 0.269 \\
+	 coarse speckled & 0.721 & 0.9 & 0.664 & 0.55 & 0.928 & 54.2 \\
+	 fine speckled & 0.748 & 0.94 & 0.81 & 0.499 & 0.941 & 0.547 \\
+	 \hline
+	\end{tabular}
 \end{table}
 
 
@@ -573,7 +595,7 @@ Table \ref{tab:Snakes} summarizes the results obtained with the morphological sn
 	\caption{Number of overlapping cells after snakes}
 	\label{tab:Snakes}
 	\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
-	\textbf{image ID} & cells &  before &  after \\
+	\textbf{image ID} & cells &  overlapping - before &  overlapping - after \\
 	\hline 
 	\hline 
 	01 & 64 & 35 & 16 \\
@@ -590,6 +612,20 @@ Table \ref{tab:Snakes} summarizes the results obtained with the morphological sn
 	12 & 60 & 49 & 8 \\
 	13 & 52 & 25 & 6 \\
 	14 & 67 & 33 & 6 \\ 
+	15 & 68 & 58 & 40 \\
+	16 & 44 & 16 & 5 \\
+	17 & 20 & 6 & 2 \\
+	18 & 43 & 15 & 4 \\
+	19 & 70 & 4 & 0 \\
+	20 & 49 & 11 & 6 \\
+	21 & 66 & 9 & 2 \\
+	22 & 120 & 76 & 27 \\
+	23 & 53 & 15 & 5 \\
+	24 & 75 & 45 & 20 \\
+	25 & 24 & 14 & 6 \\
+	26 & 47 & 47 & 23 \\
+	27 & 44 & 40 & 24 \\
+	28 & 13 & 13 & 2 \\
 	\hline
 	\end{tabular}
 	\end{center}
@@ -610,3 +646,27 @@ Table \ref{tab:Snakes} summarizes the results obtained with the morphological sn
 	\caption{Oversegmented results}
 	\label{img:oversegmentedSnakes}
 \end{figure}
+
+\begin{table}
+	\begin{center}
+	\caption{Pixel level results for each pattern, with and without convex envelope}
+	\label{tab:SnakesPix}
+	\begin{tabular}{|c||c|c||c|c|}
+	\hline
+	 & \multicolumn{2}{c}{Snakes without envelope} & \multicolumn{2}{c}{Snakes with envelope}  \\
+	\hline
+	 \textbf{Pattern} & Prec & Rec & Prec & Rec\\
+	 \hline
+	 \hline
+	 homogeneous & 0.961 & 0.975 &  0.962 & 0.978  \\
+	 centromere & 0.87 & 0.54 & 0.92 & 0.74  \\
+	 nucleolar & 0.96 & 0.48 & 0.97 & 0.76  \\
+	 cytoplasmatic & 0.826 & 0.54 & 0.786 & 0.61 \\
+	 coarse speckled & 0.941 & 0.977 & 0.948 & 0.974 \\
+	 fine speckled & 0.956 & 0.94 & 0.932 & 0.94 \\
+	 \hline
+	\end{tabular}
+	\end{center}
+\end{table}
+
+Table \ref{tab:SnakesPix} summarizes the segmentation performance with the morphological snakes, with and without the convex envelope. The results suggest that the \textit{ compact} patterns like homogeneous and speckled patterns have been segmented very successfully with the morphological snakes. On the other side, patterns like centromere and nucleolar, so as cytoplasmatic encounter certain problems in images with positive fluorescence intensity. Those problems are caused by bright organelles, or rim in a cell's body. As such organelles are very bright, they attracted the contour much more than an uniform body of a cell. Those differences are much less expressed in a low intensity images. The usage of the convex envelope of a segmented region improves the segmentation results and does not effect the segmentation of the other patterns significantly.  
