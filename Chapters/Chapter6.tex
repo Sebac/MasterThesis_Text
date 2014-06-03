@@ -297,15 +297,15 @@ Supervised training is performed in the \textit{steepest descent} manner with th
 
 \section{Evaluation}
 
-For each of the above mentioned features, except shape and information about the mitotic cells, a Deep belief network is trained. For shape classification, the segmentation masks are used and classified with SVM as described is Chapter \ref{Chapter5}. The results are summarized in tables \ref{tabs:SymFea}. \\
+For each of the above mentioned features, except shape and information about the mitotic cells, a Deep belief network is trained. For shape classification, the segmentation masks are used and classified with SVM as described is Chapter \ref{Chapter5}. The results are summarized in tables \ref{tabs:SymFea}. The evaluation is performed with  the 10-fol cross validation. \\
 
-The obtained results are quite optimistic. The recognition rate of each feature is more than 90 \% accurate. Although not good enough for use in real life, this demonstrates a great potential of deep learning methods for generating symbolic representations, for specific problems like this one. Unbalanced datasets, like the \textit{blob} and \textit{rough} classes in texture classification and the large number of organelles, seem to cause certain problems. For now, it is not clear if it is caused by their appearances or learning algorithms. Although the recognition rate of most classes is still quite successful ($~ 80 \%$ for \textit{rough} texture, ),  most of these unbalanced classes are highly distinguishing for certain patterns, so it is of interest to recognize them as accurately as possible. \\
+The obtained results are very promising. The recognition rate of each feature is more than 90 \% accurate. Although not good enough for use in real life, this demonstrates a great potential of deep learning methods for generating symbolic representations, for specific problems like this one. Unbalanced datasets, like the \textit{blob} and \textit{rough} classes in texture classification and the large number of organelles, seem to cause certain problems. For now, it is not clear if it is caused by their appearances or learning algorithms. Although the recognition rate of most classes is still quite successful ($ 83.7 \%$ for \textit{rough} texture, $82 \%$ for a large number of organelles ),  most of these unbalanced classes are highly distinguishing for certain patterns, so it is of interest to recognize them as accurately as possible. \\
 
 An interesting observation is that convolutional layers seem to not improve the accuracy. As convolutional components are developed with image classification in mind, this result is surprising. Only a brief comparison was performed at the beginning to select the most promising model to analyze it with more detail, so there might exist some models with convolutional components that achieve better results. \\
 
-By analyzing the misclassified cells, it has been observed that a great majority of misclassified cells come from low intensity images which was expected. This is somehow expectedbecause visual features are often lost in low intensity images. 
+By analysing the misclassified cells, it has been observed that a great majority of misclassified cells come from low intensity images which was expected. This is somehow expected because visual features are often lost in low intensity images. 
 
-\begin{figure}
+\begin{table}
 	\caption{Symbolic feature mapping}
 	\label{tabs:SymFea}
 	\begin{minipage}[h]{0.49\linewidth}
@@ -362,4 +362,4 @@ By analyzing the misclassified cells, it has been observed that a great majority
 		d) speckles
 		\end{center}
 	\end{minipage}
-\end{figure}
+\end{table}
