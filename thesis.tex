@@ -1,6 +1,6 @@
-\documentclass[master=mai,english,openright,fleqn]{kulemt}
+\documentclass[master=mai,english,openright,fleqn,inputenc=utf8]{kulemt}
 \setup{title={Classification of human epithelial cells' staining patterns},
-  author={Sebastijan Duman\v{c}i\'{c}},
+  author={Sebastijan Dumančić},
   promotor={Prof.\,dr.\ Hendrik Blockeel},
   assessor={},
   assistant={Antoine Adam}}
@@ -37,6 +37,7 @@
 \usepackage{multirow}
 \usepackage{xcolor,colortbl}
 \usepackage{pdfpages}
+%\usepackage{hyperref}
 
 \newcommand\MyBox[1]{
   \fbox{\lower0.75cm
@@ -53,13 +54,27 @@
 %%%%%%%
 % The lipsum package is used to generate random text.
 % You never need this in a real master thesis text!
-\IfFileExists{lipsum.sty}%
- {\usepackage{lipsum}\setlipsumdefault{11-13}}%
- {\newcommand{\lipsum}[1][11-13]{\par And some text: lipsum ##1.\par}}
+%\IfFileExists{lipsum.sty}%
+% {\usepackage{lipsum}\setlipsumdefault{11-13}}%
+% {\newcommand{\lipsum}[1][11-13]{\par And some text: lipsum ##1.\par}}
 %%%%%%%
 
 %\includeonly{chap-n}
 \begin{document}
+
+\hyphenation{numb-er}
+\hyphenation{de-mon-stra-ted}
+\hyphenation{sys-tem}
+\hyphenation{immu-ne}
+\hyphenation{fluo-res-cen-ce}
+\hyphenation{con-den-sed}
+\hyphenation{spe-ckles}
+\hyphenation{seg-men-tation}
+\hyphenation{inter-phase}
+\hyphenation{models}
+\hyphenation{un-super-vised}
+\hyphenation{pa-ra-me-ter}
+\hyphenation{adjust}
 
 \begin{preface}
 

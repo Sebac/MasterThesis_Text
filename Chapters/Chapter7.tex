@@ -275,7 +275,7 @@ When analyzing the performance of the classifier, both accuracy and the number o
 
 An interesting result is that \texttt{Aleph} for most patterns has the highest precision, but significantly lower recall. Moreover, an interesting case is a recognition of the \textit{coarse speckled} class which has very bad performance where only one percent of patterns is classified correctly. The other algorithms obviously don't have any problem with classification of the coarse speckled pattern. \\
 
-Taking both performance and simplicity into account, the rules induced by RIPPER seem to perform the best. Their simplicity makes them more applicable to real life scenarios. They also correspond more to the intuition about the patterns. The induced rules mostly extract the most distinguishing property of a certain pattern. For example, \textit{centromere} class is identified by a large number of objects in the cell body, \textit{cytoplasmatic} by the irregular shape and \textit{coarse speckled} by rough texture. All of these properties are characteristic for specific patterns and don't appear for other types. The drawback of this approach is that rules should be always applied \textit{sequentially}. \\
+Taking both performance and simplicity into account, the rules induced by RIPPER seem to perform the best. Their simplicity makes them more applicable to real life scenarios. They also correspond more to the intuition about the patterns. The induced rules mostly extract the most distinguishing property of a certain pattern. For example, \textit{centromere} class is identified by a large number of objects in the cell body, \textit{cytoplasmatic} by the irregular shape and \textit{coarse speckled} by rough texture. All of these properties are characteristic for specific patterns and don't appear for other types. \\
 
 As suggested in the literature, the most difficult classes to classify are \textit{fine speckled} and \textit{homogeneous}. It is very hard to distinguish between those two classes because they look very similar, especially in low intensity images. The literature indicated that mitotic cells are highly informative for this task. It appears that  \texttt{RIPPER} and \texttt{decision trees} are able to capture those relations, while \texttt{ALEPH} and \texttt{FOIL} are not. \\
 
@@ -298,7 +298,7 @@ Table \ref{tab:FulSys} summarizes the results obtained when features generated b
 		fine speckled & 87.00 \% & 93.27 \% & 83.33 \% & 86.54 \% & 87.00 \% & 58.57 \% & 99.09 \% & 52.4 \%\\
 		coarse speckled & 88.10 \% & 96.86 \% & 92.78 \% & 85.71 \% & 96.86 \% & 84.27 \% & 40 \% & 1 \%\\
 		\hline \hline
-		\textbf{\#rules} & \multicolumn{2}{c}{25} & \multicolumn{2}{c}{10} & \multicolumn{2}{c}{17} & \multicolumn{2}{c}{18} \\
+		\textbf{\#rules} & \multicolumn{2}{c}{25} & \multicolumn{2}{c}{10} & \multicolumn{2}{c}{17} & \multicolumn{2}{c}{14} \\
 		\hline
 	\end{tabular}
 \end{table}

@@ -136,26 +136,113 @@ In this appendix, the distributions of symbolic features are analyzed. The histo
 	\centering
 	
 		\begin{algorithmic}[1]
-			\State \texttt{IF} organelle\_type = \textit{bright on dark} \texttt{AND} number\_of\_obj = \textit{lots} 
-			\Statex \texttt{THEN} \textit{centromere}
-			
-			\State \texttt{IF} number\_of\_obj = \textit{lots} \texttt{AND} mitotic\_cells = \textit{bright middle}
-			\Statex \texttt{THEN} \textit{centromere}
-			
-			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} speckles = \textit{speckled} \texttt{AND} texture = \textit{rough}
-			\Statex \texttt{THEN} \textit{coarse speckled}
-			
-			\State \texttt{IF} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{neutral} \texttt{AND} mitotc\_cells = \textit{dark spot}
-			\Statex \texttt{THEN} \textit{coarse speckled}
-			
-			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{dark on bright} \texttt{AND} number\_of\_obj = \textit{few} \texttt{AND} mitotic\_cells = \textit{dark spot}
-			\Statex \texttt{THEN} \textit{coarse speckled}
-			
-			\State \texttt{IF} shape = \textit{irregular}
+			\State \texttt{IF} shape = \textit{irregular} %\texttt{AND} number\_of\_obj = \textit{lots} 
 			\Statex \texttt{THEN} \textit{cytoplasmatic}
 			
-			\State \texttt{IF} texture = \textit{blob}
+			\State \texttt{IF} texture = \textit{blob} %\texttt{AND} number\_of\_obj = \textit{lots} 
 			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} speckles = \textit{speckled}  \texttt{AND} texture = \textit{rough}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} texture = \textit{rough} \texttt{AND} organelle\_type = \textit{neutral}  \texttt{AND} mitotic\_type = \textit{dark spot}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} texture = \textit{rough}  \texttt{AND} organelle\_type = \textit{dark} \texttt{AND} number\_of\_organelles = \textit{few}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} organelle\_type = \textit{bright} \texttt{AND} number\_of\_organlles = \textit{lots}  
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} mitotic\_type = \textit{bright middle} \texttt{AND} number\_of\_organlles = \textit{lots}  
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} speckled = \textit{speckled} \texttt{AND} organelle\_type = \textit{bright} \texttt{AND} number\_of\_organelles = \textit{few}
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} speckled = \textit{speckled} \texttt{AND} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{bright} \texttt{AND} number\_of\_objects = \textit{few}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} organelle\_type = \textit{bright} \texttt{AND} number\_of\_objects = \textit{few} \texttt{AND} mitotic\_type = not \textit{bright middle}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} organelle\_type = \textit{neutral} \texttt{AND} number\_of\_objects = \textit{few} \texttt{AND} mitotic\_type = \textit{neutral}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} mitotic\_type = \textit{bright middle}
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} organelle\_type = \textit{neutral} \texttt{AND} speckles = \textit{speckled} \texttt{AND} mitotic\_type = \textit{neutral}
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} speckles = \textit{homogeneous} \texttt{AND} mitotic\_type = \textit{bright middle}
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{dark} \texttt{AND} mitotic\_type = \textit{neutral}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} speckles = \textit{homogeneous} \texttt{AND} texture = \textit{smooth} \texttt{AND} mitotic\_type = \textit{dark spot} \texttt{AND} number\_of\_objects = not \textit{none}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} texture = \textit{smooth} \texttt{AND} mitotic\_type = \textit{dark spot} \texttt{AND} organelle\_type = not \textit{neutral}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} texture = \textit{smooth}  \texttt{AND} organelle\_type = not \textit{smooth}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+		\end{algorithmic}
+	
+\end{figure}
+
+
+\begin{figure}
+	\caption{Rules induced by ALPEH}
+	\label{fig:RulesALEPH}
+	\small
+	\centering
+	
+		\begin{algorithmic}[1]
+			\State \texttt{IF} number\_of\_obj = \textit{lots} \texttt{AND} mitotic\_type = not \textit{dark spot} \texttt{AND} mitotic\_type = not \textit{neutral}
+			\Statex \texttt{THEN} \textit{centromere}
+			
+			\State \texttt{IF} texture = \textit{rough} \texttt{AND} number\_of\_objects = \textit{few} \texttt{AND} intensity = \textit{intermediate}
+			\Statex \texttt{THEN} \textit{coarse speckled}
+			
+			\State \texttt{IF} texture = \textit{smooth} \texttt{AND} organelle\_type = \textit{dark} \texttt{AND} mitotic\_type = \textit{neutral}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} speckles = \textit{homogeneous} \texttt{AND} texture = \textit{smooth} \texttt{AND} mitotic\_type = \textit{dark spot} \texttt{AND} number\_of\_objects = not \textit{none}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} intensity = \textit{positive} \texttt{AND} texture = \textit{smooth} \texttt{AND} mitotic\_type = \textit{dark spot} \texttt{AND} organelle\_type = not \textit{neutral}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} intensity = \textit{intermediate} \texttt{AND} texture = \textit{smooth}  \texttt{AND} organelle\_type = not \textit{smooth}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} organelle\_type = \textit{dark} \texttt{AND} number\_of\_objects = \textit{lots}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} organelle\_type = \textit{bright} \texttt{AND} speckles = \textit{homogeneous} \texttt{AND} mitotic\_type = not \textit{neutral}
+			\Statex \texttt{THEN} \textit{fine speckled}
+			
+			\State \texttt{IF} mitotic\_type = \textit{bright middle} \texttt{AND} intensity = \textit{positive} 
+			\Statex \texttt{THEN} \textit{homogeneous}
+			
+			\State \texttt{IF} shape = \textit{irregular} %\texttt{AND} number\_of\_obj = \textit{lots} 
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} texture = \textit{blob} %\texttt{AND} number\_of\_obj = \textit{lots} 
+			\Statex \texttt{THEN} \textit{cytoplasmatic}
+			
+			\State \texttt{IF} organelle\_type = \textit{bright} \texttt{AND} intensity = \textit{positive} \texttt{AND} mitotic\_type = not \textit{bright middle}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF} organelle\_type = not \textit{dark} \texttt{AND} number\_of\_objects = \textit{few} \texttt{AND} mitotic\_type = not \textit{neutral}
+			\Statex \texttt{THEN} \textit{nucleolar}
+			
+			\State \texttt{IF}speckles = \textit{speckled} \texttt{AND} number\_of\_objects = \textit{none} \texttt{AND} mitotic\_type = \textit{neutral}
+			\Statex \texttt{THEN} \textit{nucleolar}
 			
 		\end{algorithmic}
 	

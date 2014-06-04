@@ -24,13 +24,15 @@ The first property describes the shape of a cell. It can take two possible value
 
 The property \textit{speckles} denotes are there any objects present in the cell or not. \\
 
-Incorporating the knowledge about the mitotic cells found on the same image can be quite useful.Medical literature suggested that the mitotic cells, although there is no general consensus about their importance, might be informative for discriminating between certain patterns. The mitotic cells can appear in four different patterns - \textit{neutral} with no specific characteristics, \textit{bright center},  \textit{bright center} with sparkles or \textit{dark center}. \\
+Incorporating the knowledge about the mitotic cells found on the same image can be quite useful.Medical literature suggested that the mitotic cells, although there is no general consensus about their importance, might be informative for discriminating between certain patterns. The mitotic cells can appear in four different patterns - \textit{neutral} with no specific characteristics, \textit{bright center},  \textit{bright center} with sparkles or \textit{dark center}. For now, the type of mitotic cell is manually assigned. \\
 
 The following property describes the appearance of organelles in a cell's body, if there are any. This property is very discriminatory towards the nucleolar and the centromere which have bright organelles, speckled which contain dark organelles while others don't have any organelles. \\
 
 The number of organelles is also an informative property. The centromere pattern has significantly larger numbers of organelles contained in a body. The centromene, the nucleolar and the speckled patterns contain relatively small numbers of organelles expressed in the body, while the homogeneous and cytoplasmatic class don't have any organelles. \\
 
 For certain patterns, the texture could be quite informative. Although most of the patterns have a relatively smooth texture, some patterns have some very distinguishing properties. On images with positive fluorescence intensity, the cytoplasmatic class has a characteristic blob. Also, the coarse speckled class has a very specific texture that looks like the \textit{sea surface}. \\
+
+\textbf{Shape classification.} As shape classification is not performed with the Deep belief network, the results are presented here. For this step, the segmentation masks are used and classified with SVM as described is Chapter \ref{Chapter5}. The smallest rectangle that can fit the mask is divided in 6 cells - 2 horizontally and 3 vertically. For each cell, a ratio of the background and a cell pixels is calculated and used as a feature. Those 6 features were then used to train the SVM. The results are summarized in table \ref{tab:ShpInt}. The 10-fold cross validation is used to validate method. The achieved accuracy is 98.68 \%. The information about the \textit{irregular} shape is very informative about the cytoplasmatic pattern,it is important that both precision and recall are high for the class. In this case, that condition is satistied, have the precision equal to 93.57 \% and recall 95.32 \%.  \\
 
 
 
@@ -72,6 +74,19 @@ For certain patterns, the texture could be quite informative. Although most of t
 	\normalsize
 \end{table}
 
+\begin{table}
+	\centering
+	\caption{Performance of shape classification}
+	\label{tab:ShpInt}
+	\begin{tabular}{c c| c c}
+				 & & \multicolumn{2}{c}{True} \\
+			     & & \textbf{circ} & \textbf{irr} \\
+			    \hline
+			    \multirow{2}{*}{\rotatebox[origin=c]{90}{Pred}} & \textbf{circ} & \cellcolor{gray}99.62 \% & 6.43 \% \\
+			    & \textbf{irr} & 0.38 \% & \cellcolor{gray}93.57 \%
+			\end{tabular} 
+\end{table}
+
 
 
 %--------------------------------------------%
@@ -110,7 +125,15 @@ To train the network in unsupervised way, the network is represented using the \
 
 \subsection{Restricted Boltzmann Machines}
 
-Boltzmann machines are an instance of \textit{energy-based} models, in which  scalar energy is associated  to each configuration of variables. Learning in such settings corresponds to modifying the energy function so that it reflects certain properties -- support desired ones and discourage . Energy-based probabilistic models define  probability distribution over a variable through an energy function
+Boltzmann machines are an instance of \textit{energy-based} models, in which  scalar energy is associated  to each configuration of variables. Learning in such settings corresponds to modifying the energy function so that it reflects certain properties -- support desired ones and discourage. The  Boltzmann machines are trained by maximizing the probability of data:
+
+\begin{equation}
+	 \arg\max_{W}\prod_{v \in V}P(\mathbf{v})
+\end{equation}	
+	
+%	$$ \arg\max_{W}\prod_{v \in V}P(\mathbf{v}) $$
+	
+where $\mathbf{v}$ represent a raw data. Energy-based probabilistic models define  probability distribution over a variable through an energy function
 
 \begin{equation}
 	P(\mathbf{x}) = \frac{e^{-\mathtt{Energy}(\mathbf{x})}}{Z}.
@@ -168,7 +191,7 @@ and has a property that shares it's parameterization with individual layers of a
 	\begin{center}
 		\includegraphics[scale=0.5]{Figures/describing/restricted_boltzmann_machines}
 	\end{center}
-	\caption{An illustration of the Restricted Boltzmann machines}
+	\caption{An illustration of the Restricted Boltzmann machines (from \cite{Bengio2009})}
 	\label{img:RestBoltzMach}
 \end{figure}
 
@@ -297,7 +320,7 @@ Supervised training is performed in the \textit{steepest descent} manner with th
 
 \section{Evaluation}
 
-For each of the above mentioned features, except shape and information about the mitotic cells, a Deep belief network is trained. For shape classification, the segmentation masks are used and classified with SVM as described is Chapter \ref{Chapter5}. The results are summarized in tables \ref{tabs:SymFea}. The evaluation is performed with  the 10-fol cross validation. \\
+For each of the above mentioned features, except shape and information about the mitotic cells, a Deep belief network is trained.  The results are summarized in tables \ref{tabs:SymFea}. The evaluation is performed with  the 10-fold cross validation. \\
 
 The obtained results are very promising. The recognition rate of each feature is more than 90 \% accurate. Although not good enough for use in real life, this demonstrates a great potential of deep learning methods for generating symbolic representations, for specific problems like this one. Unbalanced datasets, like the \textit{blob} and \textit{rough} classes in texture classification and the large number of organelles, seem to cause certain problems. For now, it is not clear if it is caused by their appearances or learning algorithms. Although the recognition rate of most classes is still quite successful ($ 83.7 \%$ for \textit{rough} texture, $82 \%$ for a large number of organelles ),  most of these unbalanced classes are highly distinguishing for certain patterns, so it is of interest to recognize them as accurately as possible. \\
 
